@@ -3,13 +3,21 @@ import numpy
 import sys
 
 
+
+
+
 def print_persent_of_run (destination_num,number_of_node):
     per_persent=number_of_node/100
-    ##print("TE_Kraskov (KSG)(col_"+str(source_num)+" -> col_"+str(destination_num)+") = %.4f nats" %
-        #(result))
     if destination_num%per_persent==0:
         print(destination_num/per_persent,"%")
     pass
+
+
+def print_info_done (result,from_node,to_node):
+    print("TE_Kraskov (KSG)(col_"+str(from_node)+" -> col_"+str(to_node)+") = %.4f nats" %
+        (result))
+    pass
+
 
 
 def TE_Kraskov (source_arr,destination_arr,from_node,to_node,file):
@@ -27,7 +35,7 @@ def TE_Kraskov (source_arr,destination_arr,from_node,to_node,file):
     result = calc.computeAverageLocalOfObservations()
     file.write(str(from_node)+'\t'+str(to_node)+'\t'+"%.4f" %
         (result))
-    pass
+    return result
 
 
 
@@ -61,15 +69,19 @@ def read_data(file_address):
     return numpy.array(dataRaw)
 
 
-def calculate_information (number_of_node,source_num,file_address_input,file_address_output,time_column):
+def calculate_information (number_of_node,source_num,name_file,time_column):
+    file_address_input="./input_data/"+name_file+".txt"
+    file_address_output="./output_data/"+name_file+".txt"
     data = read_data(file_address_input)
     source_arr = data[:,source_num]
     file = open (file_address_output, 'w')    
     for destination_num in range (time_column,number_of_node+time_column,1):
         destination_arr = data[:,destination_num]
-        TE_Kraskov (source_arr,destination_arr,source_num,destination_num,file)
+        result = TE_Kraskov (source_arr,destination_arr,source_num,destination_num,file)
+        print_info_done(result,source_num,destination_num)
         file.write('\t')
-        TE_Kraskov (destination_arr,source_arr,destination_num,source_num,file)
+        result = TE_Kraskov (destination_arr,source_arr,destination_num,source_num,file)
+        print_info_done(result,destination_num,source_num)
         file.write('\n')
         print_persent_of_run(destination_num,number_of_node)
     file.close()
@@ -78,12 +90,12 @@ def calculate_information (number_of_node,source_num,file_address_input,file_add
 
 
 def main():
+    name_file="10ColsRandomGaussian-1"
     time_column=0   # If you have the time column, put the number 1, otherwise, put the number 0
-    number_of_node=4
+    number_of_node=10
+
     source_num=1    # Hint: The node index starts from 1 if first column is time
-    file_address_input="./input_data/4randomCols-1.txt"
-    file_address_output="./output_data/4randomCols-1.txt"
-    calculate_information(number_of_node,source_num,file_address_input,file_address_output,time_column)
+    calculate_information(number_of_node,source_num,name_file,time_column)
 
     pass
 
