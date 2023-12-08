@@ -20,7 +20,7 @@ def Wave_Slop(y):
     return xs,y
 
 def Output_file(x,y,Name_file='Output',Format='txt'):
-    with open('./Datas/'+Name_file+'.'+Format, 'w') as file:
+    with open(Name_file+'.'+Format, 'w') as file:
         for i in range(len(x)):
             file.write(f'{x[i]}\t{y[i]}\n')
     pass
@@ -36,15 +36,17 @@ def plot(x1,y1,x2,y2):
 def main():
     x1,y1=sine_wave(10000,20*np.pi,0,0)
     x2,y2=sine_wave(10000,20*np.pi,0)
-    Output_file(x1,y1,'sin1')
-    Output_file(x2,y2,'sin2')
+    #Output_file(x1,y1,'./Datas/sin1')
+    #Output_file(x2,y2,'./Datas/sin2')
+    Output_file(y1,y2,'./input_data/two_sine_wave_with_shifted')
     #x1f,y1f=Frequency_wave(x1,y1)
     #Output_file(x1f,y1f,'sin1f')
-    x1s,y1s=Wave_Slop(x1)
-    Output_file(x1s,y1s,'sin1s')
-    x2s,y2s=Wave_Slop(x2+np.pi/6)
-    Output_file(x2s,y2s,'sin2s')
+    #x1s,y1s=Wave_Slop(x1)
+    #Output_file(x1s,y1s,'sin1s')
+    #x2s,y2s=Wave_Slop(x2+np.pi/6)
+    #Output_file(x2s,y2s,'sin2s')
     #plot(x1,y1,x2,y2)
+    print("Done :)")
     pass
 
 if __name__=="__main__":

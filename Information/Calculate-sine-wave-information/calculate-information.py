@@ -61,11 +61,11 @@ def read_data(file_address):
     return numpy.array(dataRaw)
 
 
-def calculate_information (number_of_node,source_num,file_address_input,file_address_output):
+def calculate_information (number_of_node,source_num,file_address_input,file_address_output,time_column):
     data = read_data(file_address_input)
     source_arr = data[:,source_num]
     file = open (file_address_output, 'w')    
-    for destination_num in range (1,number_of_node+1,1):#1,1001,1
+    for destination_num in range (time_column,number_of_node+time_column,1):
         destination_arr = data[:,destination_num]
         TE_Kraskov (source_arr,destination_arr,source_num,destination_num,file)
         file.write('\t')
@@ -78,13 +78,12 @@ def calculate_information (number_of_node,source_num,file_address_input,file_add
 
 
 def main():
-    # Hint: The node index starts from 1
-    number_of_node=1000
-    source_num=100
-    file_address_input="./input_data/new1k01mean10.txt"
-    file_address_output="./output_data/noinfinitnew1k01mean10.txt"
-
-    calculate_information(number_of_node,source_num,file_address_input,file_address_output)
+    time_column=0   # If you have the time column, put the number 1, otherwise, put the number 0
+    number_of_node=4
+    source_num=1    # Hint: The node index starts from 1 if first column is time
+    file_address_input="./input_data/4randomCols-1.txt"
+    file_address_output="./output_data/4randomCols-1.txt"
+    calculate_information(number_of_node,source_num,file_address_input,file_address_output,time_column)
 
     pass
 
