@@ -89,14 +89,68 @@ def calculate_information (number_of_node,source_num,name_file,time_column):
 
 
 
+def TE_Kraskov_matrix (data,from_node,to_node,time_column):
+    # 1. Construct the calculator:
+    calcClass = JPackage("infodynamics.measures.continuous.kraskov").TransferEntropyCalculatorKraskov
+    calc = calcClass()
+    # 2. Set any properties to non-default values:
+    #calc.setProperty("NOISE_LEVEL_TO_ADD", "0.0")
+    #calc.setProperty("NOISE_LEVEL_TO_ADD", "1.0E-3")
+    # 3. Initialise the calculator for (re-)use:
+    calc.initialise()
+    # 4. Supply the sample data:
+    calc.setObservations(data[:,from_node+time_column],data[:,to_node+time_column])
+    # 5. Compute the estimate:
+    result = calc.computeAverageLocalOfObservations()
+    return result
+
+
+
+def calculate_matrix_information (number_of_node,source_num,name_file,time_column):
+    file_address_input="./input_data/"+name_file+".txt"
+    file_address_output="./output_data/"+name_file+".txt"
+    data = read_data(file_address_input)
+    file = open (file_address_output, 'w')
+    file.write('From_1_to_A')
+    for i in range(number_of_node):
+        file.write('\t')
+        file.write(str(i))
+    file.write('\n')
+    for from_node in range(number_of_node):
+        file.write(str(from_node))
+        for to_node in range(number_of_node):
+            file.write('\t')
+            if source_num==-1:
+                result = TE_Kraskov_matrix (data,from_node,to_node,time_column)
+                file.write("%.4f" %
+                    (result))
+                print(str(from_node)+'---->'+str(to_node)+'='+str(result))
+            else:
+                if source_num==from_node or source_num==to_node:
+                    result = TE_Kraskov_matrix (data,from_node,to_node,time_column)
+                    file.write("%.4f" %
+                        (result))
+                    print(str(from_node)+'---->'+str(to_node)+'='+str(result))
+                else:
+                    file.write("nan") 
+        file.write('\n')
+    file.close()
+    pass
+
+
+
+
 def main():
     name_file="10ColsRandomGaussian-1"
     time_column=0   # If you have the time column, put the number 1, otherwise, put the number 0
     number_of_node=10
 
-    source_num=1    # Hint: The node index starts from 1 if first column is time
-    calculate_information(number_of_node,source_num,name_file,time_column)
+    # Hint1: if you want to calculate all node source_num=-1
+    # Hint2: The node index starts from 1 if first column is time
+    source_num=3
 
+    #calculate_information(number_of_node,source_num,name_file,time_column)
+    calculate_matrix_information (number_of_node,source_num,name_file,time_column)
     pass
 
 if __name__=="__main__":
