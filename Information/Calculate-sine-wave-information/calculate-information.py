@@ -105,9 +105,9 @@ def calculate_total_information (name_file,number_of_node,source_num):
     pass
 
 def main():
-    name_file="10ColsRandomGaussian-1"#"two_sine_wave_with_shifted"
+    name_file="two_sine_wave_with_shifted_noise"#"two_sine_wave_with_shifted"
     time_column=0       # Hint1: If you have the time column, put the number 1, otherwise, put the number 0
-    number_of_node=10    # Hint2: The node index starts from 1 if first column is time
+    number_of_node=2    # Hint2: The node index starts from 1 if first column is time
     source_num=-1       # Hint3: if you want to calculate all node source_num=-1
     calculate_matrix_information (number_of_node,source_num,name_file,time_column)
     calculate_total_information (name_file,number_of_node,source_num) # Hint4: if you want to calculate total information
