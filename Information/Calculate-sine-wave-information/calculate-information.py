@@ -1,43 +1,11 @@
 from jpype import JPackage, startJVM, getDefaultJVMPath
 import numpy
 import sys
-
-
-
-
+import numpy as np
 
 def print_persent_of_run (destination_num,number_of_node):
-    per_persent=number_of_node/100
-    if destination_num%per_persent==0:
-        print(destination_num/per_persent,"%")
+    print((destination_num/number_of_node)*100,"%")
     pass
-
-
-def print_info_done (result,from_node,to_node):
-    print("TE_Kraskov (KSG)(col_"+str(from_node)+" -> col_"+str(to_node)+") = %.4f nats" %
-        (result))
-    pass
-
-
-
-def TE_Kraskov (source_arr,destination_arr,from_node,to_node,file):
-    # 1. Construct the calculator:
-    calcClass = JPackage("infodynamics.measures.continuous.kraskov").TransferEntropyCalculatorKraskov
-    calc = calcClass()
-    # 2. Set any properties to non-default values:
-    #calc.setProperty("NOISE_LEVEL_TO_ADD", "0.0")
-    #calc.setProperty("NOISE_LEVEL_TO_ADD", "1.0E-3")
-    # 3. Initialise the calculator for (re-)use:
-    calc.initialise()
-    # 4. Supply the sample data:
-    calc.setObservations(source_arr, destination_arr)
-    # 5. Compute the estimate:
-    result = calc.computeAverageLocalOfObservations()
-    file.write(str(from_node)+'\t'+str(to_node)+'\t'+"%.4f" %
-        (result))
-    return result
-
-
 
 #readFloatsFile
 def readFloatsFile(filename):
@@ -56,7 +24,6 @@ def readFloatsFile(filename):
             array.append([float(x) for x in line.split()])
     return array
 
-
 def read_data(file_address):
     # Our python data file readers are a bit of a hack, python users will do better on this:
     sys.path.append("~/Desktop/MyCodes/InformationTheory/JavaPackage/jlizier-jidt-64a7a80/demos/python")
@@ -67,27 +34,6 @@ def read_data(file_address):
     # 0. Load/prepare the data:
     dataRaw = readFloatsFile(file_address)
     return numpy.array(dataRaw)
-
-
-def calculate_information (number_of_node,source_num,name_file,time_column):
-    file_address_input="./input_data/"+name_file+".txt"
-    file_address_output="./output_data/"+name_file+".txt"
-    data = read_data(file_address_input)
-    source_arr = data[:,source_num]
-    file = open (file_address_output, 'w')    
-    for destination_num in range (time_column,number_of_node+time_column,1):
-        destination_arr = data[:,destination_num]
-        result = TE_Kraskov (source_arr,destination_arr,source_num,destination_num,file)
-        print_info_done(result,source_num,destination_num)
-        file.write('\t')
-        result = TE_Kraskov (destination_arr,source_arr,destination_num,source_num,file)
-        print_info_done(result,destination_num,source_num)
-        file.write('\n')
-        print_persent_of_run(destination_num,number_of_node)
-    file.close()
-    pass
-
-
 
 def TE_Kraskov_matrix (data,from_node,to_node,time_column):
     # 1. Construct the calculator:
@@ -103,8 +49,6 @@ def TE_Kraskov_matrix (data,from_node,to_node,time_column):
     # 5. Compute the estimate:
     result = calc.computeAverageLocalOfObservations()
     return result
-
-
 
 def calculate_matrix_information (number_of_node,source_num,name_file,time_column):
     file_address_input="./input_data/"+name_file+".txt"
@@ -124,33 +68,49 @@ def calculate_matrix_information (number_of_node,source_num,name_file,time_colum
                 result = TE_Kraskov_matrix (data,from_node,to_node,time_column)
                 file.write("%.4f" %
                     (result))
-                print(str(from_node)+'---->'+str(to_node)+'='+str(result))
+                #print(str(from_node)+'---->'+str(to_node)+'='+str("%.4f" %result))
             else:
                 if source_num==from_node or source_num==to_node:
                     result = TE_Kraskov_matrix (data,from_node,to_node,time_column)
                     file.write("%.4f" %
                         (result))
-                    print(str(from_node)+'---->'+str(to_node)+'='+str(result))
+                    #print(str(from_node)+'---->'+str(to_node)+'='+str("%.4f" %result))
                 else:
                     file.write("nan") 
+        print_persent_of_run(from_node,number_of_node)
         file.write('\n')
     file.close()
     pass
 
-
-
+def calculate_total_information (name_file,number_of_node,source_num):
+    file_address_output="./output_data/"+name_file+".txt"
+    data = np.loadtxt(file_address_output, skiprows=1, usecols=range(1, number_of_node+1))
+    file_address_output_total_info="./output_data/"+name_file+"_total_info.txt"
+    file_new = open (file_address_output_total_info, 'w')
+    print("total information for each node")
+    total=0
+    for target_node in range(number_of_node):
+        total_each_node=0
+        for loop_all_conter in range(number_of_node):
+            total_each_node+=data[target_node,loop_all_conter]
+            total_each_node+=data[loop_all_conter,target_node]
+        total_each_node-=data[target_node,target_node]# Because it is calculated twice
+        file_new.write(str(target_node)+'\t'+str("%.4f" % total_each_node)+'\n')
+        total+=total_each_node
+        print(str(target_node)+" --> "+str("%.4f" % total_each_node))
+    print("total information")
+    print("I_total --> "+str("%.4f" % total))
+    file_new.write('I_total\t'+str("%.4f" % total)+'\n')
+    file_new.close()
+    pass
 
 def main():
-    name_file="10ColsRandomGaussian-1"
-    time_column=0   # If you have the time column, put the number 1, otherwise, put the number 0
-    number_of_node=10
-
-    # Hint1: if you want to calculate all node source_num=-1
-    # Hint2: The node index starts from 1 if first column is time
-    source_num=3
-
-    #calculate_information(number_of_node,source_num,name_file,time_column)
+    name_file="10ColsRandomGaussian-1"#"two_sine_wave_with_shifted"
+    time_column=0       # Hint1: If you have the time column, put the number 1, otherwise, put the number 0
+    number_of_node=10    # Hint2: The node index starts from 1 if first column is time
+    source_num=-1       # Hint3: if you want to calculate all node source_num=-1
     calculate_matrix_information (number_of_node,source_num,name_file,time_column)
+    calculate_total_information (name_file,number_of_node,source_num) # Hint4: if you want to calculate total information
     pass
 
 if __name__=="__main__":
