@@ -37,9 +37,9 @@ def plot(x1,y1,x2,y2,address_name):
     pass
 
 def main():
-    address_name='./input_data/two_sine_wave_with_shifted_noise'
-    x1,y1=sine_wave(10000,20*np.pi,0.1,0)
-    x2,y2=sine_wave(10000,20*np.pi,0.1)
+    address_name='./input_data/two_sine_wave_with_shifted_0'
+    x1,y1=sine_wave(10000,20*np.pi,0,0)
+    x2,y2=sine_wave(10000,20*np.pi,0,0)
     #Output_file(x1,y1,'./Datas/sin1')
     #Output_file(x2,y2,'./Datas/sin2')
     Output_file(y1,y2,address_name)
