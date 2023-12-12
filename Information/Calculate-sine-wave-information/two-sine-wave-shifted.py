@@ -37,19 +37,27 @@ def plot(x1,y1,x2,y2,address_name):
     pass
 
 def main():
-    address_name='./input_data/two_sine_wave_with_shifted_0'
-    x1,y1=sine_wave(10000,20*np.pi,0,0)
-    x2,y2=sine_wave(10000,20*np.pi,0,0)
-    #Output_file(x1,y1,'./Datas/sin1')
-    #Output_file(x2,y2,'./Datas/sin2')
-    Output_file(y1,y2,address_name)
-    #x1f,y1f=Frequency_wave(x1,y1)
-    #Output_file(x1f,y1f,'sin1f')
-    #x1s,y1s=Wave_Slop(x1)
-    #Output_file(x1s,y1s,'sin1s')
-    #x2s,y2s=Wave_Slop(x2+np.pi/6)
-    #Output_file(x2s,y2s,'sin2s')
-    plot(x1,y1,x2,y2,address_name)
+    address_name='./input_data/two_sine_wave_with_constant_noise'
+    x1,y1=sine_wave(10000,20*np.pi,0.1,0)
+    #x2,y2=sine_wave(10000,20*np.pi,0,0)
+    constant=0.7
+    yc=[constant for i in range (len(x1))]
+
+    for i in range (len(yc)):
+        yc[i] = yc[i] + 0.1 * np.random.random() #np.random.rand(1)
+    print(yc)
+
+
+        #Output_file(x1,y1,'./Datas/sin1')
+        #Output_file(x2,y2,'./Datas/sin2')
+    Output_file(y1,yc,address_name)
+        #x1f,y1f=Frequency_wave(x1,y1)
+        #Output_file(x1f,y1f,'sin1f')
+        #x1s,y1s=Wave_Slop(x1)
+        #Output_file(x1s,y1s,'sin1s')
+        #x2s,y2s=Wave_Slop(x2+np.pi/6)
+        #Output_file(x2s,y2s,'sin2s')
+    plot(x1,y1,x1,yc,address_name)
     print("Done :)")
     pass
 

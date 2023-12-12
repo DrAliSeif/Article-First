@@ -227,7 +227,7 @@ def heatmap_plot(name_file,number_of_node):
     pass
 
 def main():
-    name_file="two_sine_wave_with_shifted_0"#"two_sine_wave_with_shifted"
+    name_file="two_sine_wave_with_constant_noise"#"two_sine_wave_with_shifted"
     time_column=0       # Hint1: If you have the time column, put the number 1, otherwise, put the number 0
     number_of_node=2    # Hint2: The node index starts from 1 if first column is time
     source_num=-1       # Hint3: if you want to calculate all node source_num=-1
