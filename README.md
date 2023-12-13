@@ -10,6 +10,11 @@ we have a two file .py
 2. calculate-information.py (for calculate each data in input_data file and put it in output_data) [in calculate-information.py code you can chose calculate all node or one of them for single
 ]
 
+
+
+![](https://github.com/DrAliSeif/Article-First/blob/main/Information/Calculate-sine-wave-information/output_data/10ColsRandomGaussian-1.png).
+
+
 ### create one layer network for kuramoto with cpp code
 
 this code was parallel in c++
