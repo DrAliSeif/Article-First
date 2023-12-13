@@ -7,11 +7,9 @@ in file [Information/Calculate-sine-wave-information](https://github.com/DrAliSe
 
 we have a two file .py
 1. two-sine-wave-shifted.py (for create sine wave and plot it and save data in input_data)
+![](https://github.com/DrAliSeif/Article-First/blob/main/Information/Calculate-sine-wave-information/input_data/two_sine_shifted/two_sine_wave_with_shifted_pi2_noise.png).
 2. calculate-information.py (for calculate each data in input_data file and put it in output_data) [in calculate-information.py code you can chose calculate all node or one of them for single
 ]
-
-
-
 ![](https://github.com/DrAliSeif/Article-First/blob/main/Information/Calculate-sine-wave-information/output_data/10ColsRandomGaussian-1.png).
 
 
