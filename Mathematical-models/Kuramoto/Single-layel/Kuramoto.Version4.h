@@ -1,37 +1,19 @@
-#ifndef KURAMOTO_VERSION3_H_INCLUDED
-#define KURAMOTO_VERSION3_H_INCLUDED
-/************************************************************************************************/
-/*** Topic: Kuramoto model with Runge-Kutta 4th Order Method Version 3                        ***/
-/*** Date: 12/07/2022                                                                Ali-Seif ***/
-/*** With Code:Blocks 20.03 and GCC compiler MinGW                                            ***/
-/************************************************************************************************/
-//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-#include<iostream>//for cout                                                                                              $$$$
-#include<fstream>//infile /ofstream                                                                                       $$$$
-#include <string>//for stod( )                                                                                            $$$$
-#include <sstream>//stringstream ss(line)                                                                                 $$$$
-#include<ctime>//For Example clock()                                                                                      $$$$
-#include <cmath>//For Example pow                                                                                         $$$$
+#ifndef KURAMOTO_VERSION4_H_INCLUDED
+#define KURAMOTO_VERSION4_H_INCLUDED
+
+#include<iostream>//for cout
+#include<fstream>//infile /ofstream
+#include <string>//for stod( ) function= name_file_data
+#include <sstream>//stringstream ss(line)
+#include<ctime>//For Example clock()
+#include <cmath>//For Example pow function= name_file_data
 #include <omp.h>
 #include <stdio.h>
-//#define Pi 3.141592653589793238462643383279502884//pi number                                                              $$$$
-using namespace std;//                                                                                                    $$$$
-//------------------------------------------------------------------------------------------------------------------------$$$$
-//                                                              |    |
-//                                                              |    |
-//                                                              |    |
-//                                                              |    |
-//                                                              |    |
-//                                                          Runge-Kutta 4th
-//                                                          --------------
-//                                                          \            /
-//                                                           \          /
-//                                                            \        /
-//                                                             \      /
-//                                                              \    /
-//                                                               \  /
-//                                                                \/
-//-----------------------------------------------------------------------------------------------------------------------------
+#include<iomanip>//function= name_file_data
+using namespace std;
+
+// Runge-Kutta 4th
+
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
 //@@@                                     dydt                                       @@@@                                   ---
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
@@ -227,33 +209,7 @@ double order_parameter_specific(double Ini, double Fin, int N, double* phi, doub
 //                                                               \  /
 //                                                                \/
 //-----------------------------------------------------------------------------------------------------------------------------
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Create history for delay           ---
-//@@@                             Create Hystory phases                              @@@@Create history for delay           ---
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@(Phases history delay & previous)  ---
-double** Hystorydelay_phases(const int N, const int history, const double* Phases_initial) {          //@@@calculate initial theta            ---
-    double** Phases_history_delay = new double* [N];                                //@@@                                   ---
-    for (int i = 0; i < N; i++) {                                                   //@@@                                   ---
-        Phases_history_delay[i] = new double[history];                              //@@@[node][delay]                      ---
-    }                                                                               //@@@                                   ---
-    for (int i = 0; i < N; i++) {                                                   //@@@                                   ---
-        Phases_history_delay[i][0] = Phases_initial[i];                             //@@@                                   ---
-    }                                                                               //@@@                                   ---
-    for (int t = 1; t < history; t++)                                               //@@@                                   ---
-    {                                                                               //@@@                                   ---
-        for (int i = 0; i < N; i++)                                                 //@@@                                   ---
-        {                                                                           //@@@                                   ---
-            if (Phases_history_delay[i][t - 1] >= (double)(M_PI / 2.0))               //@@@                                   ---
-            {                                                                       //@@@                                   ---
-                Phases_history_delay[i][t] = Phases_history_delay[i][t - 1] - (double)(1.5 * M_PI);//                         ---
-            }                                                                       //@@@                                   ---
-            else                                                                    //@@@                                   ---
-            {                                                                       //@@@                                   ---
-                Phases_history_delay[i][t] = Phases_history_delay[i][t - 1] + (double)(M_PI / 2.0);//                         ---
-            }                                                                       //@@@                                   ---
-        }                                                                           //@@@                                   ---
-    }                                                                               //@@@                                   ---
-    return Phases_history_delay;                                                    //@@@                                   ---
-}                                                                                   //@@@                                   ---
+
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
 //@@@                                  previous phases                               @@@@                                   ---
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
@@ -290,49 +246,9 @@ double* previous_phases(int N, int history, double** Phases_history_delay) {    
 //                                                                \/
 //-----------------------------------------------------------------------------------------------------------------------------
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
-//@@@                               count rows file in .txt                          @@@@                                   ---
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Read data from text               ---
-double* read_initial_1D(string Filename, int Numberofnode)                          //@@@ (Phases & frequency & Matrix)     ---
-{                                                                                   //@@@                                   ---
-    double* data_1D = new double[Numberofnode];                                     //@@@                                   ---
-    ifstream file("Example/" + Filename + ".txt");                                  //@@@                                   ---
-    for (int i = 0; i < Numberofnode; i++)                                          //@@@                                   ---
-    {                                                                               //@@@                                   ---
-        file >> data_1D[i];                                                         //@@@                                   ---
-    }                                                                               //@@@                                   ---
-    //cout << Filename + "\t\tloaded \t core number= "<<omp_get_thread_num()<< endl;                                        //@@@                                   ---
-    file.close();                                                                   //@@@                                   ---
-    return data_1D;                                                                 //@@@                                   ---
-}                                                                                   //@@@                                   ---
+
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
-//@@@                          Read matrix connection                               //@@@                                   ---
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
-int** read_initial_2D(string Filename, int Numberofnode)                            //@@@                                   ---
-{                                                                                   //@@@                                   ---
-    int** data_2D = new int* [Numberofnode];                                        //@@@                                   ---
-    for (int i = 0; i < Numberofnode; i++)                                          //@@@                                   ---
-        data_2D[i] = new int[Numberofnode];                                         //@@@                                   ---
-    ifstream file("Example/" + Filename + ".txt");                                  //@@@                                   ---
-    if (!file)                                                                      //@@@                                   ---
-    {                                                                               //@@@                                   ---
-        cout << "Matrix file is not here!" << endl;                                 //@@@                                   ---
-        return data_2D;                                                             //@@@                                   ---
-    }                                                                               //@@@                                   ---
-    else                                                                            //@@@                                   ---
-    {                                                                               //@@@                                   ---
-        for (int i = 0; i < Numberofnode; i++)                                      //@@@                                   ---
-        {                                                                           //@@@                                   ---
-            for (int j = 0; j < Numberofnode; j++)                                  //@@@                                   ---
-            {                                                                       //@@@                                   ---
-                int elem = 0;                                                       //@@@                                   ---
-                file >> elem;                                                       //@@@                                   ---
-                data_2D[i][j] = elem;                                               //@@@                                   ---
-            }                                                                       //@@@                                   ---
-        }                                                                           //@@@                                   ---
-    }                                                                               //@@@                                   ---
-    cout << Filename + "\t\tloaded" << endl;                                        //@@@                                   ---
-    return data_2D;                                                                 //@@@                                   ---
-}                                                                                   //@@@                                   ---
+
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
 //@@@                          Read matrix frustration                              //@@@                                   ---
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
@@ -341,7 +257,7 @@ double** read_initial_2D_double(string Filename, int Numberofnode)              
     double** data_2D = new double* [Numberofnode];                                  //@@@                                   ---
     for (int i = 0; i < Numberofnode; i++)                                          //@@@                                   ---
         data_2D[i] = new double[Numberofnode];                                      //@@@                                   ---
-    ifstream file("Example/" + Filename + ".txt");                                  //@@@                                   ---
+    ifstream file("input_data/" + Filename + ".txt");                                  //@@@                                   ---
     if (!file)                                                                      //@@@                                   ---
     {                                                                               //@@@                                   ---
         cout << "Matrix file is not here!" << endl;                                 //@@@                                   ---
@@ -379,73 +295,15 @@ double** read_initial_2D_double(string Filename, int Numberofnode)              
 //                                                                \/
 //
 //-----------------------------------------------------------------------------------------------------------------------------
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
-//@@@                               count rows file in .txt                         //@@@                                   ---
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
-int count_rows_file(string file1)                                                   //@@@                                   ---
-{                                                                                   //@@@                                   ---
-    int rows = 0, cols = 0;                                                         //@@@                                   ---
-    string line, item;                                                              //@@@                                   ---
-    ifstream file(file1);                                                           //@@@                                   ---
-    while (getline(file, line))                                                     //@@@                                   ---
-    {                                                                               //@@@                                   ---
-        rows++;                                                                     //@@@                                   ---
-        if (rows == 1)                                                              //@@@First row only:                    ---
-        {                                                                           //@@@determine the number of columns    ---
-            stringstream ss(line);                                                  //@@@Set up up a stream from this line  ---
-            while (ss >> item) cols++;                                              //@@@Each item delineated by spaces     ---
-        }                                                                           //@@@adds one to cols                   ---
-    }                                                                               //@@@                                   ---
-    file.close();                                                                   //@@@                                   ---
-    cout << "\nFile had " << rows << " rows and " << cols << " columns\n" << endl;  //@@@                                   ---
-    return rows;                                                                    //@@@                                   ---
-}                                                                                   //@@@                                   ---
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
-//@@@                               Read Data in .txt                               //@@@                                   ---
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
-double* read_data(double* data)                                                     //@@@                                   ---
-{                                                                                   //@@@                                   ---
-    string kk;                                                                      //@@@                                   ---
-    ifstream fp("data.txt");                                                        //@@@                                   ---
-    if (!fp)                                                                        //@@@                                   ---
-    {                                                                               //@@@                                   ---
-        cout << "Data file is not here!" << endl;                                   //@@@                                   ---
-    }                                                                               //@@@                                   ---
-    else                                                                            //@@@                                   ---
-    {                                                                               //@@@                                   ---
-        fp >> kk;                                                                   //@@@                                   ---
-        string line, item;                                                          //@@@                                   ---
-        int i = 1;                                                                  //@@@                                   ---
-        while (getline(fp, line))                                                   //@@@                                   ---
-        {                                                                           //@@@                                   ---
-            fp >> kk;                                                               //@@@                                   ---
-            data[i] = stod(kk);                                                     //@@@                                   ---
-            i++;                                                                    //@@@                                   ---
-        }                                                                           //@@@                                   ---
-    }                                                                               //@@@                                   ---
-    cout << "|----------------------------------------------------------------------------------------------------|" << endl;
-    cout << "|Data=>>                              \t\t\t\t\t\t\t\t     |" << endl;      //                                 ---
-    cout << "|                                      \t\t\t\t\t\t\t\t     |" << endl;     //                                 ---
-    cout << "|data[1]= Number =\t\t" << data[1] <<"\t\t\t\t\t\t\t\t     |" << endl;      //                                 ---
-    cout << "|data[2]= First Time =\t\t" << data[2] <<"\t\t\t\t\t\t\t\t     |" << endl;  //                                 ---
-    cout << "|data[3]= dt =\t\t\t" << data[3] <<"\t\t\t\t\t\t\t\t     |" << endl;        //                                 ---
-    cout << "|data[4]= Final Time =\t\t" << data[4] << "\t\t\t\t\t\t\t\t     |" << endl; //                                 ---
-    cout << "|----------------------------------------------------------------------------------------------------|" << endl;
-    cout << "|coupling=>>                              \t\t\t\t\t\t\t     |" << endl;    //                                 ---
-    cout << "|                                      \t\t\t\t\t\t\t\t     |" << endl;     //                                 ---
-    cout << "|data[5]= coupling_start =\t" << data[5] <<"\t\t\t\t\t\t\t\t     |" << endl;//                                 ---
-    cout << "|data[6]= coupling_step =\t" << data[6] <<"\t\t\t\t\t\t\t\t     |" << endl; //                                 ---
-    cout << "|data[7]= coupling_end =\t" << data[7] <<"\t\t\t\t\t\t\t\t     |" << endl;  //                                 ---
-    cout << "|----------------------------------------------------------------------------------------------------|" << endl;
-    cout << "|delay=>>                              \t\t\t\t\t\t\t\t     |" << endl;     //                                 ---
-    cout << "|                                      \t\t\t\t\t\t\t\t     |" << endl;     //                                 ---
-    cout << "|data[8]= delay_start =\t\t" << data[8] << "\t\t\t\t\t\t\t\t     |" << endl;//                                 ---
-    cout << "|data[9]= delay_step =\t\t" << data[9] << "\t\t\t\t\t\t\t\t     |" << endl; //                                 ---
-    cout << "|data[10]= delay_end =\t\t" << data[10] << "\t\t\t\t\t\t\t\t     |" << endl;//                                 ---
-    cout << "|----------------------------------------------------------------------------------------------------|" << endl;
-    fp.close();                                                                     //@@@                                   ---
-    return data;                                                                    //@@@                                   ---
-}                                                                                   //@@@                                   ---
+
+
+
+
+
+
+
+
+
 //-----------------------------------------------------------------------------------------------------------------------------
 //                                                              |    |
 //                                                              |    |
@@ -492,4 +350,186 @@ void Print_2D(string stringname, int N, string strcopling, string strdelay,     
     }                                                                               //@@@                                   ---
 }                                                                                   //@@@                                   ---
 //-----------------------------------------------------------------------------------------------------------------------------
-#endif // KURAMOTO_VERSION3_H_INCLUDED
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Create file name with 2 decimal places for each data element
+string name_file_data(double* data_text,int Number_of_row) {
+    ostringstream fileName;
+    fileName << "Save/Avg_Sync/";
+    int canter_i=0;
+    for (canter_i = 0; canter_i < Number_of_row-1; canter_i++) {
+        fileName << fixed << setprecision(2) << data_text[canter_i] << ",";
+    }
+    fileName << fixed << setprecision(2) << data_text[canter_i];
+    fileName << fixed << ".txt";
+    cout << "5. O Data file '"<< fileName.str() <<"'. :)" << endl;
+    return fileName.str();
+}
+
+
+
+
+
+// Create history of delay of phases
+double** memory_of_delay_of_phases(int Number_of_node ,double Delay_variable,double Time_step ,double* Phases_initial) {
+    // number of cell to save phases in memory
+    int memoryـcellـlength = (int(Delay_variable / Time_step) + 1);
+    // create empty Phases memory delay
+    double** Phases_memory_delay = new double* [Number_of_node];// 
+    for (int i = 0; i < Number_of_node; i++) {
+        Phases_memory_delay[i] = new double[memoryـcellـlength];// [node][delay]
+    }
+    // first memory for initial phase
+    for (int i = 0; i < Number_of_node; i++) {
+        Phases_memory_delay[i][0] = Phases_initial[i];
+    }
+    // when i have a delay in system
+    for (int t = 1; t < memoryـcellـlength; t++)
+    {
+        for (int i = 0; i < Number_of_node; i++)
+        {
+            if (Phases_memory_delay[i][t - 1] >= (double)(M_PI / 2.0))
+            {
+                Phases_memory_delay[i][t] = Phases_memory_delay[i][t - 1] - (double)(1.5 * M_PI);
+            }
+            else
+            {
+                Phases_memory_delay[i][t] = Phases_memory_delay[i][t - 1] + (double)(M_PI / 2.0);
+            }
+        }
+    }
+    return Phases_memory_delay;
+}
+
+// Read matrix connection (2D int)
+int** read_initial_2D(string Filename_address, int Number_of_node)
+{
+    int** data_2D = new int* [Number_of_node];
+    for (int i = 0; i < Number_of_node; i++)
+        data_2D[i] = new int[Number_of_node];
+    ifstream file("input_data/" + Filename_address + ".txt");
+    if (!file)
+    {
+        cout << "4. Data file Matrix is not here !? ------- error" << endl;
+        return data_2D;
+    }
+    else
+    {
+        for (int i = 0; i < Number_of_node; i++)
+        {
+            for (int j = 0; j < Number_of_node; j++)
+            {
+                int elem = 0;
+                file >> elem;
+                data_2D[i][j] = elem;
+            }
+        }
+    }
+    cout << "4. R Data file '"<< Filename_address <<"'. :)" << endl;
+    return data_2D;
+}
+
+// Read data from text 1d double
+double* read_initial_1D(string Filename_address, int Number_of_node)// (Phases & frequency)
+{
+    double* data_1D = new double[Number_of_node];
+    ifstream file("input_data/" + Filename_address + ".txt");
+    for (int i = 0; i < Number_of_node; i++)
+    {
+        file >> data_1D[i];
+    }
+    file.close();
+    cout << "3. R Data file '"<< Filename_address <<"'. :)" << endl;
+    return data_1D;
+}
+
+// Read Data from data.txt file
+double* read_data(int numner_of_data,bool show)
+{
+    double* data = new double[numner_of_data];
+    string kk;
+    ifstream file_data("data.txt");
+    if (!file_data)
+    {
+        cout << "2. Data file is not here !? ------- error" << endl;
+    }
+    else
+    {
+        cout << "2. R Data file. :)" << endl;
+        string line, item;
+        int i = 0;
+        while (i<numner_of_data)
+        {
+            file_data >> kk;
+            data[i] = stod(kk);
+            i++;
+        }
+    }
+    if (show==1)
+    {
+        cout << "|----------------------------------------------------------------------------------------------------|" << endl;
+        cout << "|Data=>>                              \t\t\t\t\t\t\t\t     |" << endl;      //                                 ---
+        cout << "|                                      \t\t\t\t\t\t\t\t     |" << endl;     //                                 ---
+        cout << "|data[0]= Number =\t\t" << data[0] <<"\t\t\t\t\t\t\t\t     |" << endl;      //                                 ---
+        cout << "|data[1]= Lambda =\t\t" << data[1] <<"\t\t\t\t\t\t\t\t     |" << endl;      //                                 ---
+        cout << "|data[2]= Alpha =\t\t" << data[2] <<"\t\t\t\t\t\t\t\t     |" << endl;      //                                 ---
+        cout << "|----------------------------------------------------------------------------------------------------|" << endl;
+        cout << "|Timing=>>                              \t\t\t\t\t\t\t     |" << endl;      //                                 ---
+        cout << "|                                      \t\t\t\t\t\t\t\t     |" << endl;     //                                 ---
+        cout << "|data[3]= First Time =\t\t" << data[3] <<"\t\t\t\t\t\t\t\t     |" << endl;  //                                 ---
+        cout << "|data[4]= dt =\t\t\t" << data[4] <<"\t\t\t\t\t\t\t\t     |" << endl;        //                                 ---
+        cout << "|data[5]= Final Time =\t\t" << data[5] << "\t\t\t\t\t\t\t\t     |" << endl; //                                 ---
+        cout << "|----------------------------------------------------------------------------------------------------|" << endl;
+        cout << "|coupling=>>                              \t\t\t\t\t\t\t     |" << endl;    //                                 ---
+        cout << "|                                      \t\t\t\t\t\t\t\t     |" << endl;     //                                 ---
+        cout << "|data[6]= coupling_start =\t" << data[6] <<"\t\t\t\t\t\t\t\t     |" << endl;//                                 ---
+        cout << "|data[7]= coupling_step =\t" << data[7] <<"\t\t\t\t\t\t\t\t     |" << endl; //                                 ---
+        cout << "|data[8]= coupling_end =\t" << data[8] <<"\t\t\t\t\t\t\t\t     |" << endl;  //                                 ---
+        cout << "|----------------------------------------------------------------------------------------------------|" << endl;
+        cout << "|delay=>>                              \t\t\t\t\t\t\t\t     |" << endl;     //                                 ---
+        cout << "|                                      \t\t\t\t\t\t\t\t     |" << endl;     //                                 ---
+        cout << "|data[9]= delay_start =\t\t" << data[9] << "\t\t\t\t\t\t\t\t     |" << endl;//                                 ---
+        cout << "|data[10]= delay_step =\t\t" << data[10] << "\t\t\t\t\t\t\t\t     |" << endl; //                                 ---
+        cout << "|data[11]=delay_end =\t\t" << data[11] << "\t\t\t\t\t\t\t\t     |" << endl;//                                 ---
+        cout << "|----------------------------------------------------------------------------------------------------|" << endl;
+    }
+    file_data.close();
+    return data;
+}
+
+// count rows & columns file in data.txt and return number of rows
+int count_rows_cols_file(string file1)
+{
+    int rows = 0, cols = 0;
+    string line, item;
+    ifstream file(file1);
+    while (getline(file, line))
+    {
+        rows++;
+        if (rows == 1)// First row only: 
+        {
+            stringstream ss(line);// Set up up a stream from this line
+            while (ss >> item) cols++;// Each item delineated by spaces
+        }
+    }
+    file.close();
+    cout << "1. File had " << rows << " rows and " << cols << " columns. :)" << endl;
+    return rows;
+}
+
+#endif // KURAMOTO_VERSION4_H_INCLUDED
