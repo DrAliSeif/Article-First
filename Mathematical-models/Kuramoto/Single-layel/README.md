@@ -13,7 +13,7 @@ example for data run
 | 0		| t_0=	| First time| 
 | 0.01	| ∆t=		| time step| 
 | 20		| t_f=	| Final time| 
-| 0		| k_0=	| Coupling initial(frome exact initial to exact final was run)| 
+| 0		| k_0=	| Coupling initial (frome exact initial to exact final was run)| 
 | 0.01	| ∆k=		| Coupling step| 
 | 3.0		| k_f=	| Coupling final| 
 | 0.0		| τ_0= 	| delay start = number of data history| 
