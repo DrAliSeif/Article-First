@@ -1,9 +1,5 @@
 // C++ Program to demonstrate Mathematical model (kuramoto single layer)
 #include"Kuramoto.Version4.h"//library Kuramoto version 4 (ubuntu version push in github)
-#include <time.h>
-#include <filesystem>
-//namespace fs = std::filesystem;
-
 
 int main() {
     // Hint1: count_rows_cols_file: para in address of file that is ./data.txt
@@ -34,7 +30,6 @@ int main() {
         double Time_variable = data[3];// reset time for new time
         while (Time_variable < (data[5] + data[4])) {
             Connected_Constant_Runge_Kutta_4(data,Delay_variable, Coupling_variable, frequency_layer1, adj_layer1, Phases_layer1_previous, Phases_history_delay_layer1,Phases_next_layer1);
-            //scale_pi(int(data[0]), Phases_layer1_previous);// change values to be in range 0 to 2*Pi
             double synchrony_layer1 = order_parameter(int(data[0]), Phases_layer1_previous);// order parameters
             Save_phases_for_each_coupling << Time_variable << '\t';
             for (int i = 0; i < int(data[0]); i++) {
