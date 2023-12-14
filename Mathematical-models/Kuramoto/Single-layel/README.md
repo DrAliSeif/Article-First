@@ -1,13 +1,13 @@
+## create one layer network for kuramoto with cpp code
+
 this code was parallel in c++
 for run code you need ubuntu or server 
 code for run: 	g++ main.cpp -fopenmp -o [name run]
 				./[name run] &
-				
-				
-## data.txt Syntax  				
+							
+## data.txt Syntax  	
 
 1. Initial phases is in [-Pi,Pi] in file [input_data/P=Initial Phases/Phases_initial_layer1_origin.txt](https://github.com/DrAliSeif/Article-First/tree/main/Mathematical-models/Kuramoto/Single-layel/input_data/P%3DInitial%20Phases)
-
 
 example for data run
 
@@ -25,3 +25,6 @@ example for data run
 | data[9]| 0.0		| τ_0= 	| delay start = number of data history| 
 | data[10]| 0.02	| ∆τ= 	| delay step| 
 | data[11]| 0.0		| τ_f= 	| delay end| 
+
+2. plot Avg_sync file with python
+![](https://github.com/DrAliSeif/Article-First/blob/main/Mathematical-models/Kuramoto/Single-layel/Save/Avg_Sync/layer1/1000.00%2C0.00%2C0.00%2C0.00%2C0.01%2C1.00%2C0.00%2C0.10%2C3.00%2C0.00%2C0.02%2C0.00.txt.png)
