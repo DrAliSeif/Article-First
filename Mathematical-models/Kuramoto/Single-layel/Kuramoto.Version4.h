@@ -15,86 +15,9 @@ using namespace std;
 // Runge-Kutta 4th
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
-//@@@                                     dydt                                       @@@@                                   ---
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
-double dydt(int Number_of_phase,                                                    //@@@                                   ---
-            double frustration_inter_layer,                                         //@@@                                   ---
-            int N,                                                                  //@@@                                   ---
-            double dt,                                                              //@@@                                   ---
-            double coupling,                                                        //@@@                                   ---
-            double W,                                                               //@@@                                   ---
-            const int* is_connected,                                                      //@@@                                   ---
-            double phi,                                                             //@@@                                   ---
-            double** phi_hist,                                                      //@@@                                   ---
-            double secondlayer,
-            double landa)                                                     //@@@                                   ---
-{                                                                                   //@@@                                   ---
-    double M = 0;                                                                   //@@@      connection calculated        ---
-    double a = 0.0;                                                                 //@@@                                   ---
-    for (int i = 0; i < N; i++){                                                    //@@@                                   ---
-        a += (is_connected[i] * sin((phi_hist[i][0] - phi)));//               ---
-    }                                                                               //@@@                                   ---
-    // M = W + (coupling / (N * 1.0)) * a;                                          //@@@                                   ---
-    //double landa = 10;                                                              //@@@                                   ---
-    double connection = 0.0;                                                        //@@@                                   ---
-    connection = (landa * sin(secondlayer - phi + frustration_inter_layer));        //@@@                                   ---
-    M = W + (coupling / (N * 1.0)) * a + connection;                                //@@@               all sum             ---
-    return M;                                                                       //@@@                                   ---
-}                                                                                   //@@@                                   ---
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
 //@@@                    Convert_next_to_history_and_previous                        @@@@                                   ---
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
-void Convert_next_to_history_and_previous(int N,                                    //@@@                                   ---
-                                          double dt,                                //@@@                                   ---
-                                          double delay,                             //@@@                                   ---
-                                          double** Phases_history_delay,            //@@@                                   ---
-                                          double* Phases_next,                      //@@@                                   ---
-                                          double* Phases_previous)                  //@@@                                   ---
-{                                                                                   //@@@                                   ---
-    int history = (delay / dt) + 1;                                                 //@@@                                   ---
-    for (int i = 0; i < N; i++) {                                                   //@@@                                   ---
-        for (int j = 0; j < history - 1; j++) {                                     //@@@                                   ---
-            Phases_history_delay[i][j] = Phases_history_delay[i][j + 1];            //@@@                                   ---
-        }                                                                           //@@@                                   ---
-        Phases_history_delay[i][history - 1] = Phases_next[i];                      //@@@                                   ---
-    }                                                                               //@@@                                   ---
-    for (int i = 0; i < N; i++) { Phases_previous[i] = Phases_next[i]; }            //@@@                                   ---
-}                                                                                   //@@@                                   ---
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
-//@@@                                CCRK4                                           @@@@                                   ---
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
-void Connected_Constant_Runge_Kutta_4(const double frustration_inter_layer,              //@@@                                   ---
-                                      int N,                                        //@@@                                   ---
-                                      double dt,                                    //@@@                                   ---
-                                      double delay,                                 //@@@                                   ---
-                                      double coupling,                              //@@@                                   ---
-                                      const double* W,                                    //@@@                                   ---
-                                      const int* const * adj,                                    //@@@                                   ---
-                                      double* y,                                    //@@@                                   ---
-                                      double** Phases_history_delay,                //@@@                                   ---
-                                      double* Phases_secondlayer,                   //@@@                                   ---
-                                      double* Phases_next,
-                                      double landa)                          //@@@                                   ---
-{                                                                                   //@@@                                   ---
-    for (int i = 0; i < N; i++)                                                     //@@@                                   ---
-    {                                                                               //@@@                                   ---
-        double k1 = dydt(i, frustration_inter_layer, N,dt,//@                                   ---
-                         coupling, W[i], adj[i], y[i], Phases_history_delay,        //@@@                                   ---
-                         Phases_secondlayer[i],landa);                                    //@@@                                   ---
-        double k2 = dydt(i, frustration_inter_layer, N,dt,//@                                   ---
-                          coupling, W[i], adj[i], y[i] + k1 * dt / 2.0,             //@@@                                   ---
-                          Phases_history_delay, Phases_secondlayer[i],landa);             //@@@                                   ---
-        double k3 = dydt(i, frustration_inter_layer, N,dt,//@                                   ---
-                          coupling, W[i], adj[i], y[i] + k2 * dt / 2.0,             //@@@                                   ---
-                          Phases_history_delay, Phases_secondlayer[i],landa);             //@@@                                   ---
-        double k4 = dydt(i, frustration_inter_layer, N,dt,//@                                   ---
-                          coupling, W[i], adj[i], y[i] + k3 * dt, Phases_history_delay,//                                   ---
-                           Phases_secondlayer[i],landa);                                  //@@@                                   ---
-        Phases_next[i] = y[i] + dt / 6.0 * (k1 + 2.0 * k2 + 2.0 * k3 + k4);         //@@@                                   ---
-    }                                                                               //@@@                                   ---
-    Convert_next_to_history_and_previous(N, dt, delay, Phases_history_delay,        //@@@                                   ---
-                                         Phases_next, y);                           //@@@                                   ---
-}                                                                                   //@@@                                   ---
+
 //-----------------------------------------------------------------------------------------------------------------------------
 //                                                              |    |
 //                                                              |    |
@@ -149,18 +72,7 @@ void scale_pi(int N, double* phi)                                               
 //                                                                \/
 //-----------------------------------------------------------------------------------------------------------------------------
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
-//@@@                                order_parameter                                 @@@@                                   ---
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
-double order_parameter(int N, double* phi)                                          //@@@                                   ---
-{                                                                                   //@@@                                   ---
-    double rc = 0.0, rs = 0.0;                                                      //@@@                                   ---
-    for (int j = 0; j < N; j++)                                                     //@@@                                   ---
-    {                                                                               //@@@                                   ---
-        rc += cos(phi[j]);                                                          //@@@                                   ---
-        rs += sin(phi[j]);                                                          //@@@                                   ---
-    }                                                                               //@@@                                   ---
-    return sqrt(pow(rc, 2) + pow(rs, 2)) / (1.0 * N);                               //@@@                                   ---
-}                                                                                   //@@@                                   ---
+//                         ---
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
 //@@@                             order_parameter_part                               @@@@                                   ---
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
@@ -343,6 +255,84 @@ void Print_2D(string stringname, int N, string strcopling, string strdelay,     
 
 
 
+
+
+
+
+
+
+
+
+void Convert_next_to_history_and_previous(int Number_of_node,
+                                          double Time_step,
+                                          double Delay_variable,
+                                          double** Phases_history_delay,
+                                          double* Phases_next,
+                                          double* Phases_previous)
+{
+    int memoryـcellـlength = (int(Delay_variable / Time_step) + 1);
+    for (int i = 0; i < Number_of_node; i++) {
+        for (int j = 0; j < memoryـcellـlength - 1; j++) {
+            Phases_history_delay[i][j] = Phases_history_delay[i][j + 1];
+        }
+        Phases_history_delay[i][memoryـcellـlength - 1] = Phases_next[i];
+    }
+    for (int i = 0; i < Number_of_node; i++) { Phases_previous[i] = Phases_next[i]; }
+}
+
+// dydt
+double dydt(int Number_of_phase,
+            double frustration_intra_layer,
+            int N,
+            double dt,
+            double coupling,
+            double W,
+            int* is_connected,
+            double phi,
+            double** phi_hist)
+{
+    double M = 0;
+    double a = 0.0;
+    for (int i = 0; i < N; i++){
+        a += (is_connected[i] * sin((phi_hist[i][0] - phi + frustration_intra_layer)));
+    }
+    M = W + (coupling / (N * 1.0)) * a ;
+    return M;
+}
+
+// CCRK4
+void Connected_Constant_Runge_Kutta_4(double* data,
+                                      double delay,
+                                      double coupling,
+                                      double* W,
+                                      int** adj,
+                                      double* y,
+                                      double** Phases_history_delay,
+                                      double* Phases_next)
+{                                
+    int Number_of_node=int(data[0]);
+    for (int i = 0; i < Number_of_node; i++)
+    {
+        double k1 = dydt(i, data[2], Number_of_node,data[4],coupling, W[i], adj[i], y[i], Phases_history_delay);
+        double k2 = dydt(i, data[2], Number_of_node,data[4],coupling, W[i], adj[i], y[i] + k1 * data[4] / 2.0,Phases_history_delay);
+        double k3 = dydt(i, data[2], Number_of_node,data[4],coupling, W[i], adj[i], y[i] + k2 * data[4] / 2.0,Phases_history_delay);
+        double k4 = dydt(i, data[2], Number_of_node,data[4],coupling, W[i], adj[i], y[i] + k3 * data[4], Phases_history_delay);
+        Phases_next[i] = y[i] + data[4] / 6.0 * (k1 + 2.0 * k2 + 2.0 * k3 + k4);
+    }
+    Convert_next_to_history_and_previous(Number_of_node, data[4], delay, Phases_history_delay,Phases_next, y);
+}
+
+// order_parameter
+double order_parameter(int Number_of_node, double* phi)
+{
+    double rc = 0.0, rs = 0.0;
+    for (int j = 0; j < Number_of_node; j++)
+    {
+        rc += cos(phi[j]);
+        rs += sin(phi[j]);
+    }
+    return sqrt(pow(rc, 2) + pow(rs, 2)) / (1.0 * Number_of_node);
+}
 
 // Create file name with 2 decimal places for each data element
 string name_file_data(string address,double* data_text,int Number_of_row) {

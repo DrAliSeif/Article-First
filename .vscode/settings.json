@@ -50,10 +50,14 @@
         "iomanip": "cpp"
     },
     "cSpell.words": [
+        "CCRK",
+        "dydt",
         "Hystorydelay",
         "Intralayer",
         "kuramoto",
+        "Kutta",
         "Memoryـcellـlength",
+        "Runge",
         "Sarika"
     ],
     "C_Cpp.errorSquiggles": "disabled"

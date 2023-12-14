@@ -32,25 +32,21 @@ int main() {
         double Total_synchrony_layer1 = 0;
         int counter_of_total_sync =0;
         double Time_variable = data[3];// reset time for new time
-    /*    while (Time_variable < (data[5] + data[4])) {
-            // Runge Kutta and scaling phase
-            Connected_Constant_Runge_Kutta_4(data[2], int(data[0]), data[4], Delay_variable, Coupling_variable, frequency_layer1, adj_layer1, Phases_layer1_previous, Phases_history_delay_layer1, Phases_layer2_previous,Phases_next_layer1,data[1]);
-            Connected_Constant_Runge_Kutta_4(data[2], int(data[0]), data[4], Delay_variable, Coupling_variable, frequency_layer2, adj_layer2, Phases_layer2_previous, Phases_history_delay_layer2, Phases_layer1_previous,Phases_next_layer2,data[1]);
-            scale_pi(int(data[0]), Phases_layer1_previous);// change values to be in range 0 to 2*Pi
-            scale_pi(int(data[0]), Phases_layer2_previous);
-            double syncrony_layer1 = order_parameter(int(data[0]), Phases_layer1_previous);// order parameters
-            double syncrony_layer2 = order_parameter(int(data[0]), Phases_layer2_previous);// order parameters
+        while (Time_variable < (data[5] + data[4])) {
+            Connected_Constant_Runge_Kutta_4(data,Delay_variable, Coupling_variable, frequency_layer1, adj_layer1, Phases_layer1_previous, Phases_history_delay_layer1,Phases_next_layer1);
+            //scale_pi(int(data[0]), Phases_layer1_previous);// change values to be in range 0 to 2*Pi
+            double synchrony_layer1 = order_parameter(int(data[0]), Phases_layer1_previous);// order parameters
             Save_phases_for_each_coupling << Time_variable << '\t';
             for (int i = 0; i < int(data[0]); i++) {
                 Save_phases_for_each_coupling << Phases_layer1_previous[i] << '\t';
             }
             Save_phases_for_each_coupling << endl;
             if (Time_variable > int(data[5] * 0.8)) {// add sync to total sync
-                Total_synchrony_layer1 += syncrony_layer1;
+                Total_synchrony_layer1 += synchrony_layer1;
                 counter_of_total_sync+=1;
             }
             Time_variable += data[4];
-        }*/
+        }
         Total_synchrony_layer1=Total_synchrony_layer1/counter_of_total_sync;// calculate total sync and pint it
         time_t end_calculate_time = time(NULL);// end of calculate time
         cout<< Coupling_variable << '\t' << Total_synchrony_layer1 <<'\t' <<"Execution Time: "<< (double)(end_calculate_time-start_calculate_time)<<" Seconds"<<endl;
