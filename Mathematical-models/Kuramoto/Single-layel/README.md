@@ -27,4 +27,4 @@ example for data run
 | data[11]| 0.0		| τ_f= 	| delay end| 
 
 2. plot Avg_sync file with python
-![](https://github.com/DrAliSeif/Article-First/blob/main/Mathematical-models/Kuramoto/Single-layel/Save/Avg_Sync/layer1/1000.00%2C0.00%2C0.00%2C0.00%2C0.01%2C1.00%2C0.00%2C0.10%2C3.00%2C0.00%2C0.02%2C0.00.txt.png)
+![](https://github.com/DrAliSeif/Article-First/blob/main/Mathematical-models/Kuramoto/Single-layel/Save/Avg_Sync/layer1/.png)
