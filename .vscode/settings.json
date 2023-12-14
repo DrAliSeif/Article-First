@@ -52,13 +52,18 @@
     "cSpell.words": [
         "CCRK",
         "dydt",
+        "fontsize",
+        "hspace",
         "Hystorydelay",
         "Intralayer",
         "kuramoto",
         "Kutta",
         "Memoryـcellـlength",
         "Runge",
-        "Sarika"
+        "Sarika",
+        "wspace",
+        "xlabel",
+        "ylabel"
     ],
     "C_Cpp.errorSquiggles": "disabled"
 }
