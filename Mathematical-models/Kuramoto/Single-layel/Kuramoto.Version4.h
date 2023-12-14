@@ -353,14 +353,13 @@ string name_file_data(string address,double* data_text,int Number_of_row) {
         fileName << fixed << setprecision(2) << data_text[canter_i] << ",";
     }
     fileName << fixed << setprecision(2) << data_text[canter_i];
-    fileName << fixed << ".txt";
-    cout << "7. O Data file '"<< fileName.str() <<"'. :)" << endl;
+    //cout << "7. O Data file '"<< fileName.str() <<"'. :)" << endl;
     return fileName.str();
 }
 
 // Print last phases data
-int print_last_phase(string address,double* data,int Number_of_row,double* last_Phase_layer1) {
-    ofstream file_print(name_file_data(address,data,12));
+int write_last_phase(string address,double* data,int Number_of_row,double* last_Phase_layer1) {
+    ofstream file_print(name_file_data(address,data,12)+".txt");
     for (int i = 0; i < int(data[0]); i++) {
         file_print << last_Phase_layer1[i] << endl;
     }

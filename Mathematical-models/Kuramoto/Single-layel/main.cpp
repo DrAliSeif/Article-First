@@ -1,9 +1,8 @@
 // C++ Program to demonstrate Mathematical model (kuramoto single layer)
 #include"Kuramoto.Version4.h"//library Kuramoto version 4 (ubuntu version push in github)
-//#include <time.h>
-
-#include<iostream>//for cout
-using namespace std;
+#include <time.h>
+#include <filesystem>
+//namespace fs = std::filesystem;
 
 
 int main() {
@@ -23,21 +22,17 @@ int main() {
     double** Phases_history_delay_layer1 = memory_of_delay_of_phases(int(data[0]),Delay_variable,data[4],Phases_initial_layer1);
     double* Phases_layer1_previous = shift_pi2_phases(int(data[0]),Delay_variable,data[4], Phases_history_delay_layer1);//Phases changer
     // Hint3: When i change it that add variable to data.txt 
-    ofstream Avg_Sync(name_file_data("Save/Avg_Sync/",data,12));
+    ofstream Avg_Sync(name_file_data("Save/Avg_Sync/layer1/",data,12)+".txt");
     double Coupling_variable = data[6];
-    /*cout<<"8. G to Coupling_variable. :)"<<endl;
-       while (Coupling_variable < (data[8])) { // Coupling loop
-        time_t start = time(NULL);
-        ostringstream ostrcopling;// declaring output string stream
-        ostrcopling << Coupling_variable;// Sending a number as a stream output
-        string strcopling = ostrcopling.str();// the str() converts number into string
-        ofstream Phases_layer2("Save/Phases/Degree_Radian="+strDegree_Radian+"_copling="+strcopling+"layer2(time)VS(Node).txt");//     ---
-        ofstream Phases_layer1("Save/Phases/Degree_Radian="+strDegree_Radian+"_copling="+strcopling+"layer1(time)VS(Node).txt");
-        double Total_syncrony_layer1 = 0;
-        double Total_syncrony_layer2 = 0;
-        // time loop
-        double time_loop = double(data[3]);// reset time for new time
-        while (time_loop < (data[5] + data[4])) {
+    cout<<"8. G to Coupling_variable. :)"<<endl;
+    while (Coupling_variable < (data[8])) { // Coupling loop
+        time_t start_calculate_time = time(NULL);
+        filesystem::create_directories(name_file_data("Save/Phases/layer1/",data,12));
+        ofstream Save_phases_for_each_coupling(name_file_data("Save/Phases/layer1/",data,12)+"/k="+to_string(Coupling_variable)+".txt");
+        double Total_synchrony_layer1 = 0;
+        int counter_of_total_sync =0;
+        double Time_variable = data[3];// reset time for new time
+    /*    while (Time_variable < (data[5] + data[4])) {
             // Runge Kutta and scaling phase
             Connected_Constant_Runge_Kutta_4(data[2], int(data[0]), data[4], Delay_variable, Coupling_variable, frequency_layer1, adj_layer1, Phases_layer1_previous, Phases_history_delay_layer1, Phases_layer2_previous,Phases_next_layer1,data[1]);
             Connected_Constant_Runge_Kutta_4(data[2], int(data[0]), data[4], Delay_variable, Coupling_variable, frequency_layer2, adj_layer2, Phases_layer2_previous, Phases_history_delay_layer2, Phases_layer1_previous,Phases_next_layer2,data[1]);
@@ -45,32 +40,25 @@ int main() {
             scale_pi(int(data[0]), Phases_layer2_previous);
             double syncrony_layer1 = order_parameter(int(data[0]), Phases_layer1_previous);// order parameters
             double syncrony_layer2 = order_parameter(int(data[0]), Phases_layer2_previous);// order parameters
-            Phases_layer2 << time_loop << '\t';//Phases_layer1 << time << '\t';
-            Phases_layer1 << time_loop << '\t';
+            Save_phases_for_each_coupling << Time_variable << '\t';
             for (int i = 0; i < int(data[0]); i++) {
-                Phases_layer2 << Phases_layer2_previous[i] << '\t';//Phases_layer1 << Phases_layer1_previous[i] << '\t';
-                Phases_layer1 << Phases_layer1_previous[i] << '\t';
+                Save_phases_for_each_coupling << Phases_layer1_previous[i] << '\t';
             }
-            Phases_layer2 << endl;// Phases_layer1 << endl;
-            Phases_layer1 << endl;
-            if (time_loop > int(data[5] * 0.2)) {// add sync to total sync
-                Total_syncrony_layer1 += syncrony_layer1;
-                Total_syncrony_layer2 += syncrony_layer2;
+            Save_phases_for_each_coupling << endl;
+            if (Time_variable > int(data[5] * 0.8)) {// add sync to total sync
+                Total_synchrony_layer1 += syncrony_layer1;
+                counter_of_total_sync+=1;
             }
-            time_loop += data[4];
-        }
-        Total_syncrony_layer1=Total_syncrony_layer1/(int(int(data[5] * 0.2) / data[4])*4);// calculate total sync and pint it
-        Total_syncrony_layer2=Total_syncrony_layer2/(int(int(data[5] * 0.2) / data[4])*4);
-        time_t end = time(NULL);
-        cout<< Coupling_variable << '\t' << Total_syncrony_layer2 <<'\t' <<"Execution Time: "<< (double)(end-start)<<" Seconds"<<endl;
-        Avg_Sync << Coupling_variable << '\t' << Total_syncrony_layer1 << '\t' << Total_syncrony_layer2 << endl;
-        Coupling_variable += data[7];//next Coupling_variable
-        Phases_layer2.close();
-        Phases_layer1.close();
-    }*/
-    print_last_phase("Save/Last_Phase/layer1/",data,12,Phases_layer1_previous);
-
-
+            Time_variable += data[4];
+        }*/
+        Total_synchrony_layer1=Total_synchrony_layer1/counter_of_total_sync;// calculate total sync and pint it
+        time_t end_calculate_time = time(NULL);// end of calculate time
+        cout<< Coupling_variable << '\t' << Total_synchrony_layer1 <<'\t' <<"Execution Time: "<< (double)(end_calculate_time-start_calculate_time)<<" Seconds"<<endl;
+        Avg_Sync << Coupling_variable << '\t' << Total_synchrony_layer1<< '\t' << (double)(end_calculate_time-start_calculate_time) << endl;
+        Save_phases_for_each_coupling.close();
+        Coupling_variable += data[7];// next Coupling_variable
+    }
+    write_last_phase("Save/Last_Phase/layer1/",data,12,Phases_layer1_previous);
     Avg_Sync.close();
     delete Phases_layer1_previous;
     delete Phases_next_layer1;
