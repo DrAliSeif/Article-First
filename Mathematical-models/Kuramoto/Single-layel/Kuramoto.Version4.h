@@ -210,25 +210,7 @@ double order_parameter_specific(double Ini, double Fin, int N, double* phi, doub
 //                                                                \/
 //-----------------------------------------------------------------------------------------------------------------------------
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
-//@@@                                  previous phases                               @@@@                                   ---
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                   ---
-double* previous_phases(int N, int history, double** Phases_history_delay) {        //@@@calculate initial theta            ---
-    double* previous = new double[N];                                               //@@@Making Array                       ---
-    for (int i = 0; i < N; i++)                                                     //@@@                                   ---
-    {                                                                               //@@@                                   ---
-        if (Phases_history_delay[i][history - 1] >= (double)(M_PI / 2.0))             //@@@                                   ---
-        {                                                                           //@@@                                   ---
-            previous[i] = Phases_history_delay[i][history - 1] - (double)(1.5 * M_PI);//@@@                                   ---
-        }                                                                           //@@@                                   ---
-        else                                                                        //@@@                                   ---
-        {                                                                           //@@@                                   ---
-            previous[i] = Phases_history_delay[i][history - 1] + (double)(M_PI / 2.0);//@@@                                   ---
-        }                                                                           //@@@                                   ---
-    }                                                                               //@@@                                   ---
-                                                                                    //@@@                                   ---
-    return previous;                                                                //@@@                                   ---
-}                                                                                   //@@@                                   ---
+
 //-----------------------------------------------------------------------------------------------------------------------------
 //                                                              |    |
 //                                                              |    |
@@ -362,28 +344,49 @@ void Print_2D(string stringname, int N, string strcopling, string strdelay,     
 
 
 
-
-
-
-
-
 // Create file name with 2 decimal places for each data element
-string name_file_data(double* data_text,int Number_of_row) {
+string name_file_data(string address,double* data_text,int Number_of_row) {
     ostringstream fileName;
-    fileName << "Save/Avg_Sync/";
+    fileName << address;
     int canter_i=0;
     for (canter_i = 0; canter_i < Number_of_row-1; canter_i++) {
         fileName << fixed << setprecision(2) << data_text[canter_i] << ",";
     }
     fileName << fixed << setprecision(2) << data_text[canter_i];
     fileName << fixed << ".txt";
-    cout << "5. O Data file '"<< fileName.str() <<"'. :)" << endl;
+    cout << "7. O Data file '"<< fileName.str() <<"'. :)" << endl;
     return fileName.str();
 }
 
+// Print last phases data
+int print_last_phase(string address,double* data,int Number_of_row,double* last_Phase_layer1) {
+    ofstream file_print(name_file_data(address,data,12));
+    for (int i = 0; i < int(data[0]); i++) {
+        file_print << last_Phase_layer1[i] << endl;
+    }
+    file_print.close();
+    return 0;
+}
 
-
-
+// Change the phases as the pi/2 clockwise
+double* shift_pi2_phases(int Number_of_node,double Delay_variable,double Time_step, double** Phases_history_delay) {// calculate initial theta
+    // number of cell to save phases in memory
+    int memoryـcellـlength = (int(Delay_variable / Time_step) + 1);
+    double* shifted_phase = new double[Number_of_node];// Making Array
+    for (int i = 0; i < Number_of_node; i++)
+    {
+        if (Phases_history_delay[i][memoryـcellـlength - 1] >= (double)(M_PI / 2.0))
+        {
+            shifted_phase[i] = Phases_history_delay[i][memoryـcellـlength - 1] - (double)(1.5 * M_PI);
+        }
+        else
+        {
+            shifted_phase[i] = Phases_history_delay[i][memoryـcellـlength - 1] + (double)(M_PI / 2.0);
+        }
+    }
+    cout << "6. S pi2 phases. :)" << endl;
+    return shifted_phase;
+}
 
 // Create history of delay of phases
 double** memory_of_delay_of_phases(int Number_of_node ,double Delay_variable,double Time_step ,double* Phases_initial) {
@@ -413,6 +416,7 @@ double** memory_of_delay_of_phases(int Number_of_node ,double Delay_variable,dou
             }
         }
     }
+    cout << "5. C '"<<memoryـcellـlength<<"' cell to memory of delay of phases. :)" << endl;
     return Phases_memory_delay;
 }
 
@@ -459,9 +463,10 @@ double* read_initial_1D(string Filename_address, int Number_of_node)// (Phases &
 }
 
 // Read Data from data.txt file
-double* read_data(int numner_of_data,bool show)
+// Read data from data.txt and write them to pointer 1d
+double* read_data(int number_of_data,bool show)
 {
-    double* data = new double[numner_of_data];
+    double* data = new double[number_of_data];
     string kk;
     ifstream file_data("data.txt");
     if (!file_data)
@@ -473,7 +478,7 @@ double* read_data(int numner_of_data,bool show)
         cout << "2. R Data file. :)" << endl;
         string line, item;
         int i = 0;
-        while (i<numner_of_data)
+        while (i<number_of_data)
         {
             file_data >> kk;
             data[i] = stod(kk);

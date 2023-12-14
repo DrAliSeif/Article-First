@@ -7,7 +7,6 @@ using namespace std;
 
 
 int main() {
-    // Read data from data.txt and write them to pointer 1d
     // Hint1: count_rows_cols_file: para in address of file that is ./data.txt
     // Hint2: read_data: first para is number of rows in data file and second para is boolean[0=dont show data,1=show data]
     // data[0]=N & data[1]=L & data[2]=a
@@ -15,8 +14,6 @@ int main() {
     // data[6]=k_0 & data[7]=∆k & data[8]=k_f
     // data[9]=τ_0 & data[10]=∆τ & data[11]=τ_f
     double* data=read_data(count_rows_cols_file("data.txt"),0);
-
-
     double* frequency_layer1 = read_initial_1D("W=Natural frequency/Layer1", int(data[0]));
     double* Phases_initial_layer1 = read_initial_1D("P=Initial Phases/Phases_initial_layer1_origin", int(data[0]));//Initial Phases  P
     int** adj_layer1 = read_initial_2D("A=Intralayer adjacency matrix/Layer1", int(data[0]));//adjacency matrix  A
@@ -24,12 +21,12 @@ int main() {
     // while (Delay_variable < (data[11])){Delay_variable+=data[10]} // Delay loop
     double* Phases_next_layer1 = new double[int(data[0])];
     double** Phases_history_delay_layer1 = memory_of_delay_of_phases(int(data[0]),Delay_variable,data[4],Phases_initial_layer1);
-
-    //double* Phases_layer1_previous = previous_phases(int(data[0]), (int(Delay_variable / data[4]) + 1), Phases_history_delay_layer1);//Phases changer
-   
-    ofstream Avg_Sync(name_file_data(data,12));
+    double* Phases_layer1_previous = shift_pi2_phases(int(data[0]),Delay_variable,data[4], Phases_history_delay_layer1);//Phases changer
+    // Hint3: When i change it that add variable to data.txt 
+    ofstream Avg_Sync(name_file_data("Save/Avg_Sync/",data,12));
     double Coupling_variable = data[6];
-    /*   while (Coupling_variable < (data[8])) { // Coupling loop
+    /*cout<<"8. G to Coupling_variable. :)"<<endl;
+       while (Coupling_variable < (data[8])) { // Coupling loop
         time_t start = time(NULL);
         ostringstream ostrcopling;// declaring output string stream
         ostrcopling << Coupling_variable;// Sending a number as a stream output
@@ -70,21 +67,13 @@ int main() {
         Coupling_variable += data[7];//next Coupling_variable
         Phases_layer2.close();
         Phases_layer1.close();
-    }
-    ofstream Last_Phase_layer1("Save/Last_Phase/layer1/Degree_Radian="+strDegree_Radian+".txt");
-    ofstream Last_Phase_layer2("Save/Last_Phase/layer2/Degree_Radian="+strDegree_Radian+".txt");
-    for (int i = 0; i < int(data[0]); i++) {
-        Last_Phase_layer1 << Phases_layer1_previous[i] << endl;
-        Last_Phase_layer2 << Phases_layer2_previous[i] << endl;
-    }
+    }*/
+    print_last_phase("Save/Last_Phase/layer1/",data,12,Phases_layer1_previous);
+
+
     Avg_Sync.close();
-    Last_Phase_layer1.close();
-    Last_Phase_layer2.close();
     delete Phases_layer1_previous;
-    delete Phases_layer2_previous;
     delete Phases_next_layer1;
-    delete Phases_next_layer2;
     delete Phases_history_delay_layer1[0];
-    delete Phases_history_delay_layer2[0];*/
     return 0;
 }
