@@ -46,7 +46,7 @@ def TE_Kraskov_matrix (data,from_node,to_node,time_column):
     calc = calcClass()
     # 2. Set any properties to non-default values:
     #calc.setProperty("NOISE_LEVEL_TO_ADD", "0.0")
-    #calc.setProperty("NOISE_LEVEL_TO_ADD", "1.0E-3")
+    calc.setProperty("NOISE_LEVEL_TO_ADD", "1.0E-3")
     # 3. Initialise the calculator for (re-)use:
     calc.initialise()
     # 4. Supply the sample data:
@@ -249,7 +249,7 @@ def main():
     source_num=100       # Hint3: if you want to calculate all node source_num=-1
     calculate_matrix_information (number_of_node,source_num,name_file,time_column)
     calculate_total_information (name_file,number_of_node) # Hint4: if you want to calculate total information
-    heatmap_plot (name_file,number_of_node)
+    #heatmap_plot (name_file,number_of_node)
     scatter_plot_for_source (name_file,source_num,number_of_node)
     pass
 
