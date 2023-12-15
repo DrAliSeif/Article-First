@@ -9,7 +9,7 @@ int main() {
     // data[6]=k_0 & data[7]=∆k & data[8]=k_f
     // data[9]=τ_0 & data[10]=∆τ & data[11]=τ_f
     double* data=read_data(count_rows_cols_file("data.txt"),0);
-    double* frequency_layer1 = read_initial_1D("W=Natural frequency/Layer1", int(data[0]));
+    double* frequency_layer1 = read_initial_1D("W=Natural frequency/1000,-0.5,0.5", int(data[0]));
     double* Phases_initial_layer1 = read_initial_1D("P=Initial Phases/Phases_initial_layer1_origin", int(data[0]));//Initial Phases  P
     int** adj_layer1 = read_initial_2D("A=Intralayer adjacency matrix/Layer1", int(data[0]));//adjacency matrix  A
     double Delay_variable = data[9];
