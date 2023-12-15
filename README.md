@@ -47,6 +47,9 @@ we have a two file .py
 ]
 ![](https://github.com/DrAliSeif/Article-First/blob/main/Information/Calculate-sine-wave-information/output_data/10ColsRandomGaussian-1.png).
 
+3. calculate information for one source node
+![](https://github.com/DrAliSeif/Article-First/blob/main/Information/Calculate-sine-wave-information/output_data/.scatter.png)
+
 *******
 # Mathematical-models
 *******
