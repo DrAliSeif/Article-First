@@ -243,7 +243,7 @@ def scatter_plot_for_source(name_file,source_num,number_of_node):
 
 
 def main():
-    name_file="k=0.100000"#"two_sine_wave_with_shifted"
+    name_file="k=0.000000"#"two_sine_wave_with_shifted"
     time_column=1       # Hint1: If you have the time column, put the number 1, otherwise, put the number 0
     number_of_node=1000    # Hint2: The node index starts from 1 if first column is time
     source_num=100       # Hint3: if you want to calculate all node source_num=-1

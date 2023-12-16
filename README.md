@@ -13,7 +13,7 @@
           Tools-codes-->Create-random-w;
           Try-to-better-understanding-->single-layer-network-with-Wmean=0;
           Try-to-better-understanding-->single-layer-network-with-Wmean=10;
-
+          Try-to-better-understanding-->double-layer-Wmean=0-shortrun;
 
             Calculate-sine-wave-information-->C1((.py));
             Calculate-sine-wave-information-->C2((.py));
@@ -26,7 +26,9 @@
             single-layer-network-with-Wmean=10-->c10((.cpp));
             single-layer-network-with-Wmean=10-->c11((.h));
             single-layer-network-with-Wmean=10-->c12((.py));
-
+            double-layer-Wmean=0-shortrun-->c16((.cpp));
+            double-layer-Wmean=0-shortrun-->c17((.h));
+            double-layer-Wmean=0-shortrun-->c18((.py));
 
               Single-layel-->c4((.cpp));
               Single-layel-->c5((.h));
