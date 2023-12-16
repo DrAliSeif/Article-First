@@ -14,6 +14,8 @@
           Try-to-better-understanding-->single-layer-network-with-Wmean=0;
           Try-to-better-understanding-->single-layer-network-with-Wmean=10;
           Try-to-better-understanding-->double-layer-Wmean=0-shortrun;
+          Try-to-better-understanding-->double-layer-Wmean=10-shortrun;
+
 
             Calculate-sine-wave-information-->C1((.py));
             Calculate-sine-wave-information-->C2((.py));
@@ -29,6 +31,10 @@
             double-layer-Wmean=0-shortrun-->c16((.cpp));
             double-layer-Wmean=0-shortrun-->c17((.h));
             double-layer-Wmean=0-shortrun-->c18((.py));
+            double-layer-Wmean=10-shortrun-->c19((.cpp));
+            double-layer-Wmean=10-shortrun-->c20((.h));
+            double-layer-Wmean=10-shortrun-->c21((.py));
+
 
               Single-layel-->c4((.cpp));
               Single-layel-->c5((.h));
