@@ -15,25 +15,25 @@
           Try-to-better-understanding-->single-layer-network-with-Wmean=10;
 
 
-            Calculate-sine-wave-information-->C1((calculate-information.py));
-            Calculate-sine-wave-information-->C2((two-sine-wave-shifted.py));
+            Calculate-sine-wave-information-->C1((.py));
+            Calculate-sine-wave-information-->C2((.py));
             Kuramoto-->Single-layel;
             Kuramoto-->double-layer;
-            Create-random-w-->c3((Create-random-w.py));
-            single-layer-network-with-Wmean=0-->c7((main.cpp));
-            single-layer-network-with-Wmean=0-->c8((Kuramoto.Version4.h));
-            single-layer-network-with-Wmean=0-->c9((Plot_Avg_Sync.py));
-            single-layer-network-with-Wmean=10-->c10((main.cpp));
-            single-layer-network-with-Wmean=10-->c11((Kuramoto.Version4.h));
-            single-layer-network-with-Wmean=10-->c12((Plot_Avg_Sync.py));
+            Create-random-w-->c3((.py));
+            single-layer-network-with-Wmean=0-->c7((.cpp));
+            single-layer-network-with-Wmean=0-->c8((.h));
+            single-layer-network-with-Wmean=0-->c9((.py));
+            single-layer-network-with-Wmean=10-->c10((.cpp));
+            single-layer-network-with-Wmean=10-->c11((.h));
+            single-layer-network-with-Wmean=10-->c12((.py));
 
 
-              Single-layel-->c4((main.cpp));
-              Single-layel-->c5((Kuramoto.Version4.h));
-              Single-layel-->c6((Plot_Avg_Sync.py));
-              double-layer-->c13((main.cpp));
-              double-layer-->c14((Kuramoto.Version4.h));
-              double-layer-->c15((Plot_Avg_Sync.py));
+              Single-layel-->c4((.cpp));
+              Single-layel-->c5((.h));
+              Single-layel-->c6((.py));
+              double-layer-->c13((.cpp));
+              double-layer-->c14((.h));
+              double-layer-->c15((.py));
         
    ```
 
