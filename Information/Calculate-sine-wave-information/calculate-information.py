@@ -226,7 +226,7 @@ def heatmap_plot(name_file,number_of_node):
     plt.savefig("./output_data/"+name_file+'.png',dpi=300)
     pass
 
-def scatter_plot_for_source(name_file,source_num,number_of_node):
+def scatter_plot_for_source_from(name_file,source_num,number_of_node):
     file_address_output="./output_data/"+name_file+".txt"
     data = np.loadtxt(file_address_output, skiprows=1, usecols=range(1, number_of_node+1))
     #print(data[source_num])
@@ -235,22 +235,41 @@ def scatter_plot_for_source(name_file,source_num,number_of_node):
     plt.scatter(x,data[source_num])
     plt.xlabel("index of node", fontsize=10)
     plt.ylabel("information of node"+str(source_num), fontsize=10)
+    plt.xlim(0, number_of_node)
+    plt.ylim(0, 0.3)
     fig.tight_layout()
     plt.subplots_adjust(top = 0.92, bottom=0.08,left=0.1)
     plt.gcf().set_size_inches(8, 6.5)# don't change it
-    plt.savefig("./output_data/"+name_file+'-scatter.png',dpi=300)
+    plt.savefig("./output_data/from-node"+name_file+'-scatter.png',dpi=300)
     pass
 
+def scatter_plot_for_source_to (name_file,source_num,number_of_node):
+    file_address_output="./output_data/"+name_file+".txt"
+    data = np.loadtxt(file_address_output, skiprows=1, usecols=range(1, number_of_node+1))
+    #print(data[:,100])
+    x=[i for i in range (number_of_node)]
+    fig, ax = plt.subplots()
+    plt.scatter(x,data[:,100])
+    plt.xlabel("index of node", fontsize=10)
+    plt.ylabel("information of node"+str(source_num), fontsize=10)
+    plt.xlim(0, number_of_node)
+    plt.ylim(0, 0.3)
+    fig.tight_layout()
+    plt.subplots_adjust(top = 0.92, bottom=0.08,left=0.1)
+    plt.gcf().set_size_inches(8, 6.5)# don't change it
+    plt.savefig("./output_data/to-node"+name_file+'-scatter.png',dpi=300)
+    pass
 
 def main():
-    name_file="k=0.000000"#"two_sine_wave_with_shifted"
+    name_file="k=2.700000"#"two_sine_wave_with_shifted"
     time_column=1       # Hint1: If you have the time column, put the number 1, otherwise, put the number 0
     number_of_node=1000    # Hint2: The node index starts from 1 if first column is time
     source_num=100       # Hint3: if you want to calculate all node source_num=-1
     calculate_matrix_information (number_of_node,source_num,name_file,time_column)
     calculate_total_information (name_file,number_of_node) # Hint4: if you want to calculate total information
     #heatmap_plot (name_file,number_of_node)
-    scatter_plot_for_source (name_file,source_num,number_of_node)
+    scatter_plot_for_source_from (name_file,source_num,number_of_node)
+    scatter_plot_for_source_to (name_file,source_num,number_of_node)
     pass
 
 if __name__=="__main__":
