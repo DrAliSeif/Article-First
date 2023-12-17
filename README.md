@@ -114,4 +114,4 @@ example for data run
 *******
 ## four-subplot-probability-density
 *******
-![](https://github.com/DrAliSeif/Article-First/blob/main/Pictures-of-article/four-subplot-transitions/.fig2_100_new.png)
+![](https://github.com/DrAliSeif/Article-First/blob/main/Pictures-of-article/four-subplot-transitions/.fig3_100_new.png)
