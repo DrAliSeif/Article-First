@@ -9,6 +9,7 @@
         Article-First-->Try-to-better-understanding;
         Article-First-->Pictures-of-article;
 
+          Pictures-of-article-->four-subplot-transitions;
           Pictures-of-article-->four-subplot-probability-density;
           Information-->Calculate-sine-wave-information;
           Mathematical-models-->Kuramoto;
@@ -18,6 +19,7 @@
           Try-to-better-understanding-->double-layer-Wmean=0-shortrun;
           Try-to-better-understanding-->double-layer-Wmean=10-shortrun;
 
+            four-subplot-transitions-->C23((.py));
             four-subplot-probability-density-->C22((.py));
             Calculate-sine-wave-information-->C1((.py));
             Calculate-sine-wave-information-->C2((.py));
@@ -109,3 +111,7 @@ example for data run
 
 ![](https://github.com/DrAliSeif/Article-First/blob/main/Pictures-of-article/four-subplot-probability-density/.fig2_100_new.png)
 
+*******
+## four-subplot-probability-density
+*******
+![](https://github.com/DrAliSeif/Article-First/blob/main/Pictures-of-article/four-subplot-transitions/.fig2_100_new.png)
