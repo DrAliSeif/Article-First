@@ -7,7 +7,9 @@
         Article-First-->Mathematical-models;
         Article-First-->Tools-codes;
         Article-First-->Try-to-better-understanding;
+        Article-First-->Pictures-of-article;
 
+          Pictures-of-article-->four-subplot-probability-density;
           Information-->Calculate-sine-wave-information;
           Mathematical-models-->Kuramoto;
           Tools-codes-->Create-random-w;
@@ -16,7 +18,7 @@
           Try-to-better-understanding-->double-layer-Wmean=0-shortrun;
           Try-to-better-understanding-->double-layer-Wmean=10-shortrun;
 
-
+            four-subplot-probability-density-->C22((.py));
             Calculate-sine-wave-information-->C1((.py));
             Calculate-sine-wave-information-->C2((.py));
             Kuramoto-->Single-layel;
@@ -42,9 +44,7 @@
               double-layer-->c13((.cpp));
               double-layer-->c14((.h));
               double-layer-->c15((.py));
-        
    ```
-
 
 *******
 ## Information
@@ -98,3 +98,14 @@ example for data run
 
 2. plot Avg_sync file with python
 ![](https://github.com/DrAliSeif/Article-First/blob/main/Mathematical-models/Kuramoto/Single-layel/Save/Avg_Sync/layer1/.png)
+
+
+
+*******
+# Pictures-of-article
+*******
+## four-subplot-probability-density
+*******
+
+![](https://github.com/DrAliSeif/Article-First/blob/main/Pictures-of-articlePictures-of-article/four-subplot-probability-density/.png)
+
