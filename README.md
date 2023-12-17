@@ -107,5 +107,5 @@ example for data run
 ## four-subplot-probability-density
 *******
 
-![](https://github.com/DrAliSeif/Article-First/blob/main/Pictures-of-articlePictures-of-article/four-subplot-probability-density/.png)
+![](https://github.com/DrAliSeif/Article-First/blob/main/Pictures-of-article/four-subplot-probability-density/.fig2_100_new.png)
 
