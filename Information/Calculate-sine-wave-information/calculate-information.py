@@ -45,8 +45,13 @@ def TE_Kraskov_matrix (data,from_node,to_node,time_column):
     calcClass = JPackage("infodynamics.measures.continuous.kraskov").TransferEntropyCalculatorKraskov
     calc = calcClass()
     # 2. Set any properties to non-default values:
+    #calc.setProperty("DELAY", "2")
+    calc.setProperty("k", "38")
+    calc.setProperty("AUTO_EMBED_METHOD", "MAX_CORR_AIS_AND_TE")
+    #calc.setProperty("AUTO_EMBED_RAGWITZ_NUM_NNS", "4")
+
     #calc.setProperty("NOISE_LEVEL_TO_ADD", "0.0")
-    calc.setProperty("NOISE_LEVEL_TO_ADD", "1.0E-3")
+    #calc.setProperty("NOISE_LEVEL_TO_ADD", "1.0E-3")
     # 3. Initialise the calculator for (re-)use:
     calc.initialise()
     # 4. Supply the sample data:
@@ -109,7 +114,7 @@ def calculate_total_information (name_file,number_of_node):
     file_new.close()
     pass
 
-def heatmap_plot(name_file,number_of_node):
+def heatmap_plot(name_file,number_of_node,source_num):
     def heatmap(data, row_labels, col_labels, ax=None,
                 cbar_kw=None, cbarlabel="", **kwargs):
         """
@@ -132,6 +137,9 @@ def heatmap_plot(name_file,number_of_node):
         **kwargs
             All other arguments are forwarded to `imshow`.
         """
+        # Limit the color scale range (adjust vmin and vmax as needed)
+        vmin, vmax = 0.2, 0.8
+
         if ax is None:
             ax = plt.gca()
         if cbar_kw is None:
@@ -139,23 +147,25 @@ def heatmap_plot(name_file,number_of_node):
         # Plot the heatmap
         im = ax.imshow(data, **kwargs)
         # Create colorbar
-        cbar = ax.figure.colorbar(im, ax=ax, **cbar_kw)
+        # Create the colorbar with limited range
+        cbar = ax.figure.colorbar(im, ax=ax, **cbar_kw, orientation='vertical', pad=0.02, fraction=0.1, aspect=30)
+        #cbar.set_ticks([vmin, vmax])  # Set ticks at the specified vmin and vmax values
+        #cbar.ax.set_yticklabels([f'{vmin:.2f}', f'{vmax:.2f}'])  # Set tick labels
         cbar.ax.set_ylabel(cbarlabel, rotation=-90, va="bottom")
         # Show all ticks and label them with the respective list entries.
         ax.set_xticks(np.arange(data.shape[1]), labels=col_labels)
         ax.set_yticks(np.arange(data.shape[0]), labels=row_labels)
         # Let the horizontal axes labeling appear on top.
-        ax.tick_params(top=False, bottom=True,
-                    labeltop=False, labelbottom=True)
+        ax.tick_params(top=True, bottom=False,labeltop=True, labelbottom=False)
         # Rotate the tick labels and set their alignment.
         '''plt.setp(ax.get_xticklabels(), rotation=-10, ha="right",
                 rotation_mode="anchor")'''
         # Turn spines off and create white grid.
         ax.spines[:].set_visible(False)
-        ax.set_xticks(np.arange(data.shape[1]+1)-.5, minor=True)
+        '''ax.set_xticks(np.arange(data.shape[1]+1)-.5, minor=True)
         ax.set_yticks(np.arange(data.shape[0]+1)-.5, minor=True)
-        ax.grid(which="minor", color="w", linestyle='-', linewidth=3)
-        ax.tick_params(which="minor", bottom=False, left=False)
+        ax.grid(which="minor", color="w", linestyle='-', linewidth=3)'''
+        #ax.tick_params(which="minor", bottom=False, left=False)
 
         return im, cbar
     def annotate_heatmap(im, data=None, valfmt="{x:.2f}",
@@ -194,7 +204,7 @@ def heatmap_plot(name_file,number_of_node):
         # Set default alignment to center, but allow it to be
         # overwritten by textkw.
         kw = dict(horizontalalignment="center",
-                verticalalignment="center")
+                    verticalalignment="center")
         kw.update(textkw)
         # Get the formatter in case a string is supplied
         if isinstance(valfmt, str):
@@ -211,32 +221,41 @@ def heatmap_plot(name_file,number_of_node):
 
     file_address_output="./output_data/"+name_file+".txt"
     data = np.loadtxt(file_address_output, skiprows=1, usecols=range(1, number_of_node+1))
+    for i in range(len(data)):
+        for j in range(len(data)):
+            if data[i,j]<0:
+                data[i,j]=0
+            else:
+                data[i,j]=round(data[i,j], 2)
+
     yـaxis = np.arange(number_of_node)
     xـaxis = np.arange(number_of_node)
     fig, ax = plt.subplots()
-    im, cbar = heatmap(data, yـaxis, xـaxis, ax=ax,
-                    cmap="YlGn", cbarlabel="Information")
-    if number_of_node<=100:
-        texts = annotate_heatmap(im, valfmt="{x:.3f}")
-    plt.xlabel("To node", fontsize=10)
-    plt.ylabel("From node", fontsize=10)
-    fig.tight_layout()
-    plt.subplots_adjust(top = 0.92, bottom=0.08,left=0.08)
-    plt.gcf().set_size_inches(8, 6.5)# don't change it
-    plt.savefig("./output_data/"+name_file+'.png',dpi=300)
+
+    if source_num==-1:
+        im, cbar = heatmap(data, yـaxis, xـaxis, ax=ax,cmap="YlGn", cbarlabel="Information")
+        texts = annotate_heatmap(im, valfmt="{x:.2f}")
+        plt.title("To node", fontsize=10)
+        #plt.xlabel("To node", fontsize=10)
+        plt.ylabel("From node", fontsize=10)
+        fig.tight_layout()
+        plt.subplots_adjust(top = 0.92, bottom=0.08,left=0.08)
+        plt.gcf().set_size_inches(8, 6.5)# don't change it
+        plt.savefig("./output_data/"+name_file+'.png',dpi=300)
     pass
+
+
 
 def scatter_plot_for_source_from(name_file,source_num,number_of_node):
     file_address_output="./output_data/"+name_file+".txt"
     data = np.loadtxt(file_address_output, skiprows=1, usecols=range(1, number_of_node+1))
-    #print(data[source_num])
     x=[i for i in range (number_of_node)]
     fig, ax = plt.subplots()
     plt.scatter(x,data[source_num])
     plt.xlabel("index of node", fontsize=10)
     plt.ylabel("information of node"+str(source_num), fontsize=10)
-    plt.xlim(0, number_of_node)
-    plt.ylim(0, 0.3)
+    #plt.xlim(0, number_of_node)
+    #plt.ylim(0, 0.3)
     fig.tight_layout()
     plt.subplots_adjust(top = 0.92, bottom=0.08,left=0.1)
     plt.gcf().set_size_inches(8, 6.5)# don't change it
@@ -249,11 +268,11 @@ def scatter_plot_for_source_to (name_file,source_num,number_of_node):
     #print(data[:,100])
     x=[i for i in range (number_of_node)]
     fig, ax = plt.subplots()
-    plt.scatter(x,data[:,100])
+    plt.scatter(x,data[:,source_num])
     plt.xlabel("index of node", fontsize=10)
     plt.ylabel("information of node"+str(source_num), fontsize=10)
-    plt.xlim(0, number_of_node)
-    plt.ylim(0, 0.3)
+    #plt.xlim(0, number_of_node)
+    #plt.ylim(0, 0.3)
     fig.tight_layout()
     plt.subplots_adjust(top = 0.92, bottom=0.08,left=0.1)
     plt.gcf().set_size_inches(8, 6.5)# don't change it
@@ -261,13 +280,13 @@ def scatter_plot_for_source_to (name_file,source_num,number_of_node):
     pass
 
 def main():
-    name_file="k=2.700000"#"two_sine_wave_with_shifted"
+    name_file="k=2.700000"#"k=0.000000"#"two_sine_wave_with_shifted"
     time_column=1       # Hint1: If you have the time column, put the number 1, otherwise, put the number 0
     number_of_node=1000    # Hint2: The node index starts from 1 if first column is time
     source_num=100       # Hint3: if you want to calculate all node source_num=-1
     calculate_matrix_information (number_of_node,source_num,name_file,time_column)
     calculate_total_information (name_file,number_of_node) # Hint4: if you want to calculate total information
-    #heatmap_plot (name_file,number_of_node)
+    heatmap_plot (name_file,number_of_node,source_num)
     scatter_plot_for_source_from (name_file,source_num,number_of_node)
     scatter_plot_for_source_to (name_file,source_num,number_of_node)
     pass
