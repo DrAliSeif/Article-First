@@ -9,6 +9,7 @@
         Article-First-->Try-to-better-understanding;
         Article-First-->Pictures-of-article;
 
+          Information-->calculate-avg-correlations
           Pictures-of-article-->four-subplot-transitions;
           Pictures-of-article-->four-subplot-probability-density;
           Information-->Calculate-sine-wave-information;
@@ -19,6 +20,7 @@
           Try-to-better-understanding-->double-layer-Wmean=0-shortrun;
           Try-to-better-understanding-->double-layer-Wmean=10-shortrun;
 
+            calculate-avg-correlations-->C24((.py));
             four-subplot-transitions-->C23((.py));
             four-subplot-probability-density-->C22((.py));
             Calculate-sine-wave-information-->C1((.py));
@@ -49,9 +51,10 @@
    ```
 
 *******
-## Information
-
-### Calculate the information for two sine wave 
+# Information
+*******
+## Calculate the information for two sine wave 
+*******
 
 in file [Information/Calculate-sine-wave-information](https://github.com/DrAliSeif/Article-First/tree/main/Information/Calculate-sine-wave-information)
 
@@ -64,6 +67,12 @@ we have a two file .py
 
 3. calculate information for one source node
 ![](https://github.com/DrAliSeif/Article-First/blob/main/Information/Calculate-sine-wave-information/output_data/.scatter.png)
+
+*******
+## Calculate the information for two sine wave 
+*******
+calculate-avg-correlations
+
 
 *******
 # Mathematical-models
