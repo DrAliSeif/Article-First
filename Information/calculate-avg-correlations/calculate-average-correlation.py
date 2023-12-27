@@ -59,7 +59,7 @@ def scatter_plot_for_source(data,source,name_file):
 
 
 def main():
-    name_file="k=0.100000"
+    name_file="k=2.700000"
     data,rows,column=read_data(name_file)
 
     '''
@@ -74,7 +74,7 @@ def main():
     '''
 
 
-    source=100
+    source=970
     #target=0
     matrix_total_one_source=np.zeros(column)
     for target in range (rows):
