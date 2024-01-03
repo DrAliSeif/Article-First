@@ -59,10 +59,10 @@ def scatter_plot_for_source(data,source,name_file):
 
 
 def main():
-    name_file="k=2.700000"
+    name_file="k=0.000000"
     data,rows,column=read_data(name_file)
 
-    '''
+    
     #for total average correlation
     matrix_total=np.zeros((column, column))
     #rows=100
@@ -74,7 +74,7 @@ def main():
     '''
 
 
-    source=970
+    source=100
     #target=0
     matrix_total_one_source=np.zeros(column)
     for target in range (rows):
@@ -83,7 +83,7 @@ def main():
     matrix_total_one_source=matrix_total_one_source/rows
 
     scatter_plot_for_source (matrix_total_one_source,source,name_file)
-
+    '''
     pass
 
 if __name__=="__main__":

@@ -16,7 +16,7 @@ def plot_eshel(number_of_pic):
 
 def plot_ran(ax,x,y_l1,y_l2):  
     #font1 = {'family': 'Arial', 'color': '#262626'}
-    ax.scatter(x, y_l1,  color="#3333ff", s=90,alpha=1, edgecolor='k')
+    ax.scatter(x, y_l1,  color="#3333ff", s=160,alpha=1, edgecolor='k')
     ax.plot(x, y_l2  , color="k",linewidth=7.8)
     ax.plot(x, y_l2  , color="#ff3333",linewidth=6)
     ax.xaxis.set_minor_locator(AutoMinorLocator())
@@ -32,8 +32,8 @@ def plot_ran(ax,x,y_l1,y_l2):
     ax.tick_params(axis='both', direction='in', which='minor', length=6)
 def plot_reg(ax,x,y_l1,y_l2):  
     #font1 = {'family': 'Arial', 'color': '#262626'}
-    ax.scatter(x, y_l1,  color="k", s=149,alpha=1)
-    ax.scatter(x, y_l1,  color="#3333ff", s=90,alpha=1)
+    ax.scatter(x, y_l1,  color="k", s=229,alpha=1)
+    ax.scatter(x, y_l1,  color="#3333ff", s=160,alpha=1)
     ax.plot(x, y_l2  , color="k",linewidth=7.8)
     ax.plot(x, y_l2  , color="#ff3333",linewidth=6)
     ax.xaxis.set_minor_locator(AutoMinorLocator())
@@ -75,6 +75,32 @@ def plot_ran_hist(ax,y_l1,y_l2):
     ax.tick_params(axis='both', direction='in', which='minor', length=6)
     ax.set_xlim(0,2)
     ax.set_xticks(ticks=np.arange(0, 2.4, 0.4))
+
+
+
+def text_plot():
+    plt.text(0,0, '(a)',  fontsize=30,
+         bbox=dict(boxstyle="round",
+                   ec="#262626",
+                   fc=(1, 1, 1, 0.80),
+                   ))
+    plt.text(1.74,1.07, '(b)',  fontsize=30,
+         bbox=dict(boxstyle="round",
+                    ec="#262626",
+                    fc=(1, 1, 1, 0.80)
+                    ))
+    plt.text(-0.93,0.45, '(c)',  fontsize=30,
+         bbox=dict(boxstyle="round",
+                   ec="#262626",
+                   fc=(1, 1, 1, 0.80),
+                   ))
+    plt.text(3.51,-0.84, '(d)',  fontsize=30,
+         bbox=dict(boxstyle="round",
+                   ec="#262626",
+                   fc=(1, 1, 1, 0.80),
+                   ))
+    pass
+
 def main():
     Layer1_Ali_Data=Read_Data('./ali0.8.txt')
     Layer1_Sarika_Data=Read_Data('./Saika0.8a.txt')
@@ -82,16 +108,17 @@ def main():
     Number_of_Node = [i for i in range(1000)]
     axes=[plot_eshel(i) for i in range(1, 5)]
     plot_ran(axes[0],Number_of_Node,Layer1_Sarika_Data,Layer2)
-    plot_reg(axes[1],Number_of_Node,Layer1_Ali_Data,Layer2)
-    plot_ran_hist(axes[2],Layer1_Sarika_Data,Layer2)
+    plot_ran_hist(axes[1],Layer1_Sarika_Data,Layer2)
+    plot_reg(axes[2],Number_of_Node,Layer1_Ali_Data,Layer2)
     plot_ran_hist(axes[3],Layer1_Ali_Data,Layer2)
+    text_plot()
 
 
     plt.rcParams["axes.edgecolor"] = "k"
     plt.rcParams["axes.linewidth"]  = 1.25
-    plt.subplots_adjust(top = 0.97, bottom=0.08, hspace=0.2, wspace=0.44)
-    plt.gcf().set_size_inches(22, 17)
-    plt.savefig("fig2_100_new.png", dpi=100)
+    plt.subplots_adjust(top = 0.97, bottom=0.08, hspace=0.24, wspace=0.34)
+    plt.gcf().set_size_inches(20, 17)
+    plt.savefig("fig_density_100_new4.png", dpi=100)
     #plt.show()
     pass
 
