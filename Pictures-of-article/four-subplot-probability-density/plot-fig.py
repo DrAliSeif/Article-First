@@ -79,7 +79,7 @@ def plot_ran_hist(ax,y_l1,y_l2):
 
 
 def text_plot():
-    plt.text(0,0, '(a)',  fontsize=30,
+    plt.text(-0.93,1.07, '(a)',  fontsize=30,
          bbox=dict(boxstyle="round",
                    ec="#262626",
                    fc=(1, 1, 1, 0.80),
@@ -94,7 +94,7 @@ def text_plot():
                    ec="#262626",
                    fc=(1, 1, 1, 0.80),
                    ))
-    plt.text(3.51,-0.84, '(d)',  fontsize=30,
+    plt.text(1.74,0.45, '(d)',  fontsize=30,
          bbox=dict(boxstyle="round",
                    ec="#262626",
                    fc=(1, 1, 1, 0.80),
@@ -118,7 +118,8 @@ def main():
     plt.rcParams["axes.linewidth"]  = 1.25
     plt.subplots_adjust(top = 0.97, bottom=0.08, hspace=0.24, wspace=0.34)
     plt.gcf().set_size_inches(20, 17)
-    plt.savefig("fig_density_100_new4.png", dpi=100)
+    plt.savefig("fig-v1.png", dpi=100)
+    #plt.savefig("fig-v1.eps")
     #plt.show()
     pass
 

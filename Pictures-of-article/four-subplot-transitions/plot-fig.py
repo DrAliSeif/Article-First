@@ -107,7 +107,9 @@ def main():
 
     plt.subplots_adjust(top = 0.97, bottom=0.08, hspace=0.2, wspace=0.44)
     plt.gcf().set_size_inches(22, 17)
-    plt.savefig("fig3_100_new.png", dpi=100)
+    #plt.savefig("fig3_100_new.png", dpi=100)
+    #plt.savefig("fig-v1.png", dpi=100)
+    plt.savefig("fig-v1.eps")
     pass
 
 if __name__=="__main__":
